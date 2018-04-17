@@ -669,18 +669,18 @@ direct_html_link_index has a value which is an int
 =item Description
 
 Provide the report information. Either workspace name or workspace id is required  The structure is:
-    params = {
-        report: {
-            text_message: '',
-            warnings: ['w1'],
-            objects_created: [ {
-                ref: 'ws/objid',
-                description: ''
-            }]
-        },
-        workspace_name: 'ws'
-        workspace_id: id
-    }
+params = {
+    report: {
+        text_message: '',
+        warnings: ['w1'],
+        objects_created: [ {
+            ref: 'ws/objid',
+            description: ''
+        }]
+    },
+    workspace_name: 'ws'
+    workspace_id: id
+}
 
 
 =item Definition
@@ -720,10 +720,10 @@ workspace_id has a value which is an int
 =item Description
 
 The reference to the saved KBaseReport.  The structure is:
-    reportInfo = {
-        ref: 'ws/objid/ver',
-        name: 'myreport.2262323452'
-    }
+reportInfo = {
+    ref: 'ws/objid/ver',
+    name: 'myreport.2262323452'
+}
 
 
 =item Definition

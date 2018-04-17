@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
 from DataFileUtil.DataFileUtilClient import DataFileUtil
-import utils.report_utils as report_utils
-from utils.validation_utils import validate_simple_report_params, validate_extended_report_params
+from uuid import uuid4
 import os
 #END_HEADER
 
@@ -39,11 +38,12 @@ class KBaseReportPy:
         #END_CONSTRUCTOR
         pass
 
+
     def create(self, ctx, params):
         """
         Create a KBaseReport with a brief summary of an App run.
         :param params: instance of type "CreateParams" (Provide the report
-           information. Either workspace name or workspace id is required
+           information. Either workspace name or workspace id is required 
            The structure is: params = { report: { text_message: '', warnings:
            ['w1'], objects_created: [ { ref: 'ws/objid', description: '' }]
            }, workspace_name: 'ws' workspace_id: id }) -> structure:
@@ -83,9 +83,40 @@ class KBaseReportPy:
         # ctx is the context object
         # return variables are: info
         #BEGIN create
-        # Validate params
-        params = validate_simple_report_params(params)
-        info = report_utils.create_report(ctx, params, self.dfu)
+        ws_name = params['workspace_name']
+        report_name = "report_" + str(uuid4())
+        if 'prefix' in params:
+            report_name = str(params['prefix']) + '.' + report_name
+        print('xyz', report_name, ws_name)
+        workspace_id = self.dfu.ws_name_to_id(ws_name)
+        # Set default empty values for various Report parameters
+        report_dict = {
+            'objects_created': [],
+            'warnings': [],
+            'file_links': [],
+            'html_links': [],
+            'direct_html': '',
+            'direct_html_link_index': 0
+        }
+        report_dict.update(params['report'])
+        save_object_params = {
+            'id': workspace_id,
+            'objects': [{
+                'type': 'KBaseReport.Report',
+                'data': report_dict,
+                'name': report_name,
+                'meta': {},
+                'hidden': 1,
+                'provenance': ctx['provenance']
+            }]
+        }
+        dfu_oi = self.dfu.save_objects(save_object_params)[0]
+        object_reference = str(dfu_oi[6]) + '/' + str(dfu_oi[0]) + '/' + str(dfu_oi[4])
+        print('object_reference', object_reference)
+        info = {
+            'ref': object_reference,
+            'name': report_name
+        }
         #END create
 
         # At some point might do deeper type checking...
@@ -97,8 +128,7 @@ class KBaseReportPy:
 
     def create_extended_report(self, ctx, params):
         """
-        A more complex function to create a report that enables the user to
-        specify files and html view that the report should link to
+        A more complex function to create a report that enables the user to specify files and html view that the report should link to
         :param params: instance of type "CreateExtendedReportParams"
            (Parameters used to create a more complex report with file and
            html links The following arguments allow the user to specify the
@@ -152,8 +182,7 @@ class KBaseReportPy:
         # ctx is the context object
         # return variables are: info
         #BEGIN create_extended_report
-        params = validate_extended_report_params(params)
-        info = report_utils.create_extended(ctx, params, self.dfu)
+        info = {}
         #END create_extended_report
 
         # At some point might do deeper type checking...
@@ -162,7 +191,6 @@ class KBaseReportPy:
                              'info is not type dict as required.')
         # return the results
         return [info]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

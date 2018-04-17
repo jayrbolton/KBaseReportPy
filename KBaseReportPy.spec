@@ -3,14 +3,12 @@
 */
 module KBaseReportPy {
     /* @id ws */
-
     typedef string ws_id;
 
     /*
         Reference to a handle
         @id handle
     */
-
     typedef string handle_ref;
 
     /*
@@ -18,7 +16,6 @@ module KBaseReportPy {
         that can be associated with the object.
         @optional description
     */
-
     typedef structure {
         ws_id ref;
         string description;
@@ -28,7 +25,6 @@ module KBaseReportPy {
         Represents a file or html archive that the report should like to
         @optional description label
     */
-
     typedef structure {
         handle_ref handle;
         string description;
@@ -46,7 +42,6 @@ module KBaseReportPy {
         @metadata ws length(text_message) as Size(characters)
         @metadata ws length(objects_created) as Objects Created
     */
-
     typedef structure {
         string text_message;
         list<string> warnings;
@@ -59,20 +54,19 @@ module KBaseReportPy {
 
     /*
         Provide the report information. Either workspace name or workspace id is required  The structure is:
-            params = {
-                report: {
-                    text_message: '',
-                    warnings: ['w1'],
-                    objects_created: [ {
-                        ref: 'ws/objid',
-                        description: ''
-                    }]
-                },
-                workspace_name: 'ws'
-                workspace_id: id
-            }
+        params = {
+            report: {
+                text_message: '',
+                warnings: ['w1'],
+                objects_created: [ {
+                    ref: 'ws/objid',
+                    description: ''
+                }]
+            },
+            workspace_name: 'ws'
+            workspace_id: id
+        }
     */
-
 
     typedef structure {
         Report report;
@@ -82,21 +76,19 @@ module KBaseReportPy {
 
     /*
         The reference to the saved KBaseReport.  The structure is:
-            reportInfo = {
-                ref: 'ws/objid/ver',
-                name: 'myreport.2262323452'
-            }
+        reportInfo = {
+            ref: 'ws/objid/ver',
+            name: 'myreport.2262323452'
+        }
     */
-
     typedef structure {
         ws_id ref;
         string name;
     } ReportInfo;
 
     /*
-            Create a KBaseReport with a brief summary of an App run.
+        Create a KBaseReport with a brief summary of an App run.
     */
-
     funcdef create(CreateParams params) returns (ReportInfo info) authentication required;
 
     typedef structure {
@@ -105,6 +97,7 @@ module KBaseReportPy {
         string name;
         string description;
     } File;
+
     /*
         Parameters used to create a more complex report with file and html links
         The following arguments allow the user to specify the classical data fields in the report object:
@@ -140,6 +133,7 @@ module KBaseReportPy {
         string workspace_name;
         int workspace_id;
     } CreateExtendedReportParams;
+
     /*
         A more complex function to create a report that enables the user to specify files and html view that the report should link to
     */

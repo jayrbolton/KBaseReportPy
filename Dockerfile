@@ -8,17 +8,22 @@ MAINTAINER KBase Developer
 
 # RUN apt-get update
 
+# Update security deps
+RUN pip install -U pip
+RUN pip install --upgrade \
+    cffi pyopenssl ndg-httpsclient pyasn1 requests 'requests[security]'
+
+# Install pip deps
+COPY requirements.txt /kb/module/requirements.txt
+WORKDIR /kb/module
+RUN pip install -r requirements.txt
 
 # -----------------------------------------
 
 COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
 RUN chmod -R a+rw /kb/module
-
-WORKDIR /kb/module
-
 RUN make all
-
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
 CMD [ ]

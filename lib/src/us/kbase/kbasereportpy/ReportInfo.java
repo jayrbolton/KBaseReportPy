@@ -15,10 +15,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: ReportInfo</p>
  * <pre>
  * The reference to the saved KBaseReport.  The structure is:
- *     reportInfo = {
- *         ref: 'ws/objid/ver',
- *         name: 'myreport.2262323452'
- *     }
+ * reportInfo = {
+ *     ref: 'ws/objid/ver',
+ *     name: 'myreport.2262323452'
+ * }
  * </pre>
  * 
  */

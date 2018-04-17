@@ -2,7 +2,6 @@
 #BEGIN_HEADER
 from DataFileUtil.DataFileUtilClient import DataFileUtil
 import utils.report_utils as report_utils
-from utils.validation_utils import validate_simple_report_params, validate_extended_report_params
 import os
 #END_HEADER
 
@@ -83,9 +82,7 @@ class KBaseReportPy:
         # ctx is the context object
         # return variables are: info
         #BEGIN create
-        # Validate params
-        params = validate_simple_report_params(params)
-        info = report_utils.create_report(ctx, params, self.dfu)
+        info = report_utils.create_report(params, self.dfu)
         #END create
 
         # At some point might do deeper type checking...
@@ -152,8 +149,11 @@ class KBaseReportPy:
         # ctx is the context object
         # return variables are: info
         #BEGIN create_extended_report
-        params = validate_extended_report_params(params)
-        info = report_utils.create_extended(ctx, params, self.dfu)
+        # TODO
+        # loop through params['file_links'] and upload all to shock
+        # do the same with params['html_links']
+        #   for html, zip up dirs
+        info = report_utils.create_report(params, self.dfu)
         #END create_extended_report
 
         # At some point might do deeper type checking...

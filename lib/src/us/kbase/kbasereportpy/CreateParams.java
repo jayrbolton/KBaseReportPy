@@ -15,18 +15,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: CreateParams</p>
  * <pre>
  * Provide the report information. Either workspace name or workspace id is required  The structure is:
- *     params = {
- *         report: {
- *             text_message: '',
- *             warnings: ['w1'],
- *             objects_created: [ {
- *                 ref: 'ws/objid',
- *                 description: ''
- *             }]
- *         },
- *         workspace_name: 'ws'
- *         workspace_id: id
- *     }
+ * params = {
+ *     report: {
+ *         text_message: '',
+ *         warnings: ['w1'],
+ *         objects_created: [ {
+ *             ref: 'ws/objid',
+ *             description: ''
+ *         }]
+ *     },
+ *     workspace_name: 'ws'
+ *     workspace_id: id
+ * }
  * </pre>
  * 
  */

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import unittest
-import os  # noqa: F401
-import json  # noqa: F401
+import os
 import time
+import shutil
+
+from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 from os import environ
 try:
@@ -16,6 +18,7 @@ from biokbase.workspace.client import Workspace as workspaceService
 from KBaseReportPy.KBaseReportPyImpl import KBaseReportPy
 from KBaseReportPy.KBaseReportPyServer import MethodContext
 from KBaseReportPy.authclient import KBaseAuth as _KBaseAuth
+from voluptuous import MultipleInvalid
 
 
 class KBaseReportPyTest(unittest.TestCase):
@@ -49,6 +52,7 @@ class KBaseReportPyTest(unittest.TestCase):
         cls.serviceImpl = KBaseReportPy(cls.cfg)
         cls.scratch = cls.cfg['scratch']
         cls.callback_url = os.environ['SDK_CALLBACK_URL']
+        cls.dfu = DataFileUtil(cls.callback_url)
 
     @classmethod
     def tearDownClass(cls):
@@ -74,20 +78,123 @@ class KBaseReportPyTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
+    def getDfu(self):
+        return DataFileUtil(self.callback_url)
+
     def test_create(self):
-        # Prepare test objects in workspace if needed using
-        # self.getWsClient().save_objects({'workspace': self.getWsName(),
-        #                                  'objects': []})
-        #
-        # Run your method by
-        # ret = self.getImpl().your_method(self.getContext(), parameters...)
-        #
-        # Check returned data with
-        # self.assertEqual(ret[...], ...) or other unittest methods
-        self.getImpl().create(self.getContext(), {
+        result = self.getImpl().create(self.getContext(), {
             'workspace_name': self.getWsName(),
             'report': {
                 'text_message': 'this is a test',
             }
         })
+        self.assertTrue(len(result[0]['ref']))
+        self.assertTrue(len(result[0]['name']))
+        # TODO fetch the report using dfu by ref, check contents
+
+    def test_create_param_errors(self):
+        # See lib/KBaseReportPy/utils/validation_utils
+        # We're only testing a couple examples here; there are many more error possiblities
+        with self.assertRaises(MultipleInvalid) as er:
+            self.getImpl().create(self.getContext(), {'report': {}})
+        self.assertEqual(str(er.exception), "required key not provided @ data['workspace_name']")
+        with self.assertRaises(MultipleInvalid) as er:
+            self.getImpl().create(self.getContext(), {'workspace_name': 'x'})
+        self.assertEqual(str(er.exception), "required key not provided @ data['report']")
+
+    def test_create_extended_param_errors(self):
+        # See lib/KBaseReportPy/utils/validation_utils
+        # We're only testing a couple examples here; there are many more error possiblities
+        with self.assertRaises(MultipleInvalid) as er:
+            self.getImpl().create_extended_report(self.getContext(), {})
+        self.assertEqual(str(er.exception), "required key not provided @ data['workspace_name']")
+        with self.assertRaises(MultipleInvalid) as er:
+            self.getImpl().create_extended_report(self.getContext(), {'workspace_name': 123})
+        self.assertEqual(
+            str(er.exception),
+            "expected str for dictionary value @ data['workspace_name']"
+        )
+
+    def test_create_extended_report_with_file_paths(self):
+        dirname = os.path.dirname(__file__)
+        a_path = os.path.join(self.scratch, 'a.txt')
+        b_path = os.path.join(self.scratch, 'b.txt')
+        shutil.copy2(os.path.join(dirname, 'data/a.txt'), a_path)
+        shutil.copy2(os.path.join(dirname, 'data/b.txt'), b_path)
+        result = self.getImpl().create_extended_report(self.getContext(), {
+            'workspace_name': self.getWsName(),
+            'report_object_name': 'my_report',
+            'file_links': [
+                {
+                    'name': 'a',
+                    'description': 'a',
+                    'path': a_path
+                },
+                {
+                    'name': 'b',
+                    'description': 'b',
+                    'path': b_path
+                }
+            ]
+        })
+        self.assertTrue(len(result[0]['ref']))
+        self.assertTrue(len(result[0]['name']))
+        obj = self.dfu.get_objects({'object_refs': [result[0]['ref']]})
+        file_links = obj['data'][0]['data']['file_links']
+        self.assertEqual(len(file_links), 2)
+        self.assertEqual(file_links[0]['name'], u'a')
+        self.assertEqual(file_links[1]['name'], u'b')
+
+    def test_create_extended_report_with_uploaded_files(self):
+        dirname = os.path.dirname(__file__)
+        a_path = os.path.join(self.scratch, 'a.txt')
+        b_path = os.path.join(self.scratch, 'b.txt')
+        shutil.copy2(os.path.join(dirname, 'data/a.txt'), a_path)
+        shutil.copy2(os.path.join(dirname, 'data/b.txt'), b_path)
+        result = self.getImpl().create_extended_report(self.getContext(), {
+            'workspace_name': self.getWsName(),
+            'report_object_name': 'my_report',
+            'file_links': [
+                {
+                    'name': 'a',
+                    'description': 'a',
+                    'path': a_path
+                },
+                {
+                    'name': 'b',
+                    'description': 'b',
+                    'path': b_path
+                }
+            ]
+        })
+        self.assertTrue(len(result[0]['ref']))
+        self.assertTrue(len(result[0]['name']))
+        # TODO test that file links with paths get uploaded
+        # TODO test that html links with paths get zipped and uploaded
+
+    def test_create_extended_report_with_html_paths(self):
+        dirname = os.path.dirname(__file__)
+        a_path = os.path.join(self.scratch, 'a.html')
+        b_path = os.path.join(self.scratch, 'b.html')
+        shutil.copy2(os.path.join(dirname, 'data/a.html'), a_path)
+        shutil.copy2(os.path.join(dirname, 'data/b.html'), b_path)
+        result = self.getImpl().create_extended_report(self.getContext(), {
+            'workspace_name': self.getWsName(),
+            'report_object_name': 'my_report',
+            'html_links': [
+                {
+                    'name': 'a',
+                    'description': 'a',
+                    'path': a_path
+                },
+                {
+                    'name': 'b',
+                    'description': 'b',
+                    'path': b_path
+                }
+            ]
+        })
+        self.assertTrue(len(result[0]['ref']))
+        self.assertTrue(len(result[0]['name']))
+        # TODO test that file links with paths get uploaded
+        # TODO test that html links with paths get zipped and uploaded

@@ -34,7 +34,7 @@ class KBaseReportPy:
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
         self.callback_url = os.environ['SDK_CALLBACK_URL']
-        self.shared_folder = config['scratch']
+        self.scratch = config['scratch']
         self.dfu = DataFileUtil(self.callback_url)
         #END_CONSTRUCTOR
         pass

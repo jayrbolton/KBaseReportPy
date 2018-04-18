@@ -6,7 +6,13 @@ from uuid import uuid4
 
 
 def create_report(ctx, params, dfu):
-    """ Create a simple report """
+    """
+    Create a simple report
+    :param ctx: context dict passed into KBaseReportImpl#create
+    :param params: see utils/validation_utils
+    :param dfu: instance of DataFileUtil
+    :returns: report data
+    """
     ws_name = params['workspace_name']
     report_name = "report_" + str(uuid4())
     if 'prefix' in params:
@@ -46,11 +52,11 @@ def create_extended(ctx, params, dfu):
     """
     Create an extended report
     This will upload files to shock if you provide scratch paths instead of shock_ids
+    :param ctx: context dict passed into KBaseReportImpl#create
+    :param params: see utils/validation_utils
+    :param dfu: instance of DataFileUtil
+    :returns: report data
     """
-    # TODO
-    # loop through params['file_links'] and upload all to shock
-    # do the same with params['html_links']
-    #   for html, zip up dirs
     validate_file_array('file_links', params.get('file_links', []))
     validate_file_array('html_links', params.get('html_links', []))
     files = fetch_or_upload_files(dfu, params.get('file_links', []))
@@ -59,7 +65,7 @@ def create_extended(ctx, params, dfu):
         'text_message': params.get('message', ''),
         'file_links': files,
         'html_links': html_files,
-        'direct_html': params.get('direct_html', ''),  # TODO format html string base 64
+        'direct_html': params.get('direct_html', ''),
         'direct_html_link_index': params.get('direct_html_link_index', 0),
         'objects_created': params.get('objects_created', []),
         'html_window_height': params.get('html_window_height'),

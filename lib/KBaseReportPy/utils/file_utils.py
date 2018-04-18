@@ -11,16 +11,16 @@ def fetch_or_upload_files(dfu, files, zip=False):
     """
     out_files = []
     for file in files:
-        if file['path']:
+        if 'path' in file:
             # Having a 'path' key means we have to upload to shock
             shock = dfu.file_to_shock({
                 'file_path': file['path'],
                 'make_handle': 1,
                 'pack': 'zip' if zip else None
             })
-        elif file['shock_id']:
+        elif 'shock_id' in file:
             # Having a 'shock_id' means it is already uploaded
-            shock = dfu.own_shock_node({'shock_id': file['shock_id'], 'make_handle': 1})[0]
+            shock = dfu.own_shock_node({'shock_id': file['shock_id'], 'make_handle': 1})
         print('xyz', shock)
         out_files.append(__get_file_data(shock, file))
     return out_files

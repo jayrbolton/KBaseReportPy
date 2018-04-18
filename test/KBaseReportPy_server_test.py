@@ -90,7 +90,7 @@ class KBaseReportPyTest(unittest.TestCase):
         return wsName
 
     def getImpl(self):
-        return self.__class__.serviceImpl
+        return self.__class__.serviceImp
 
     def getContext(self):
         return self.__class__.ctx
@@ -110,7 +110,6 @@ class KBaseReportPyTest(unittest.TestCase):
         self.assertEqual(file_links[0]['name'], u'a')
         self.assertEqual(file_links[1]['name'], u'b')
 
-    @unittest.skip('x')
     def test_create(self):
         result = self.getImpl().create(self.getContext(), {
             'workspace_name': self.getWsName(),
@@ -122,7 +121,6 @@ class KBaseReportPyTest(unittest.TestCase):
         self.assertTrue(len(result[0]['name']))
         # TODO fetch the report using dfu by ref, check contents
 
-    @unittest.skip('x')
     def test_create_param_errors(self):
         # See lib/KBaseReportPy/utils/validation_utils
         # We're only testing a couple examples here; there are many more error possiblities
@@ -133,7 +131,6 @@ class KBaseReportPyTest(unittest.TestCase):
             self.getImpl().create(self.getContext(), {'workspace_name': 'x'})
         self.assertEqual(str(er.exception), "required key not provided @ data['report']")
 
-    @unittest.skip('x')
     def test_create_extended_param_errors(self):
         # See lib/KBaseReportPy/utils/validation_utils
         # We're only testing a couple examples here; there are many more error possiblities
@@ -144,7 +141,7 @@ class KBaseReportPyTest(unittest.TestCase):
             self.getImpl().create_extended_report(self.getContext(), {'workspace_name': 123})
         self.assertEqual(
             str(er.exception),
-            "expected str for dictionary value @ data['workspace_name']"
+            "expected basestring for dictionary value @ data['workspace_name']"
         )
 
     def test_create_extended_report_with_file_paths(self):

@@ -2,7 +2,7 @@ module-name:
     KBaseReportPy
 
 module-description:
-    A KBase module
+    Generate output reports in KBase apps with attached HTML and files
 
 service-language:
     python

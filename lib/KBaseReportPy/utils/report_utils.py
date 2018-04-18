@@ -41,7 +41,6 @@ def create_report(ctx, params, dfu):
     }
     obj = dfu.save_objects(save_object_params)[0]
     ref = __get_object_ref(obj)
-    print('object_reference', ref)
     return {
         'ref': ref,
         'name': report_name

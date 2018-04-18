@@ -15,8 +15,6 @@ def create_report(ctx, params, dfu):
     """
     ws_name = params['workspace_name']
     report_name = "report_" + str(uuid4())
-    if 'prefix' in params:
-        report_name = str(params['prefix']) + '.' + report_name
     workspace_id = dfu.ws_name_to_id(ws_name)
     # Set default empty values for various Report parameters
     report_data = {

@@ -102,6 +102,7 @@ class KBaseReportPyTest(unittest.TestCase):
         :param link_name: one of "html_links" or "file_links"
         :returns: none
         """
+        self.assertEqual(self.getImpl().status(self.getContext())[0]['state'], 'OK')
         self.assertTrue(len(result[0]['ref']))
         self.assertTrue(len(result[0]['name']))
         obj = self.dfu.get_objects({'object_refs': [result[0]['ref']]})
@@ -119,6 +120,7 @@ class KBaseReportPyTest(unittest.TestCase):
         })
         self.assertTrue(len(result[0]['ref']))
         self.assertTrue(len(result[0]['name']))
+        self.assertEqual(self.getImpl().status(self.getContext())[0]['state'], 'OK')
         # TODO fetch the report using dfu by ref, check contents
 
     def test_create_param_errors(self):
@@ -143,6 +145,21 @@ class KBaseReportPyTest(unittest.TestCase):
             str(er.exception),
             "expected basestring for dictionary value @ data['workspace_name']"
         )
+
+    def test_invalid_file_links(self):
+        # Test a file link path where the file is non-existent
+        file = {
+            'name': 'a',
+            'description': 'a',
+            'path': 'tmp/no.txt'
+        }
+        with self.assertRaises(ValueError) as err:
+            self.getImpl().create_extended_report(self.getContext(), {
+                'workspace_name': self.getWsName(),
+                'report_object_name': 'my_report',
+                'file_links': [file]
+            })
+        self.assertTrue(len(str(err.exception)))
 
     def test_create_extended_report_with_file_paths(self):
         result = self.getImpl().create_extended_report(self.getContext(), {

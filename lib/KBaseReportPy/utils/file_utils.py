@@ -28,23 +28,9 @@ def fetch_or_upload_files(dfu, files, zip=False):
 
 def validate_file_array(name, files):
     """
-    Raise an exception if any entry in `files` is:
-     - not a dict
-     - does not have 'path' or 'shock_id'
-     - has a non-existent path
+    Raise an exception if any path entry in `files` is non-existent
     """
     for file in files:
-        print('FILE', file)
-        if not isinstance(file, dict):
-            raise ValueError(
-                'All entries in ' + name + ' should be dictionaries: '
-                + str(files)
-            )
-        if ('path' not in file) and ('shock_id' not in file):
-            raise ValueError(
-                'All entries in ' + name + ' should have either "path" or "shock_id":'
-                + str(files)
-            )
         if 'path' in file and (not os.path.isfile(file['path'])):
             raise ValueError(
                 'File path does not exist: ' + file['path']
@@ -54,7 +40,7 @@ def validate_file_array(name, files):
 
 def __get_file_data(shock, file):
     """
-    Return a dict that can be used in 'html_links' or 'file_links'
+    Return a dict that can be used in 'html_links' or 'file_links' in the simple report
     :param shock: a shock dict with id, handle, etc
     :param file: a dict with shock_id, name, description, label
     """

@@ -90,7 +90,7 @@ class KBaseReportPyTest(unittest.TestCase):
         return wsName
 
     def getImpl(self):
-        return self.__class__.serviceImp
+        return self.__class__.serviceImpl
 
     def getContext(self):
         return self.__class__.ctx

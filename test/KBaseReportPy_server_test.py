@@ -96,11 +96,12 @@ class KBaseReportPyTest(unittest.TestCase):
     def getContext(self):
         return self.__class__.ctx
 
-    def check_extended_result(self, result, link_name):
+    def check_extended_result(self, result, link_name, file_names):
         """
-        Check the file upload results for an extended report
+        Test utility: check the file upload results for an extended report
         :param result: result dictionary from running .create_extended_report
         :param link_name: one of "html_links" or "file_links"
+        :param file_names: names of the files for us to check against
         :returns: none
         """
         self.assertEqual(self.getImpl().status(self.getContext())[0]['state'], 'OK')
@@ -109,10 +110,12 @@ class KBaseReportPyTest(unittest.TestCase):
         obj = self.dfu.get_objects({'object_refs': [result[0]['ref']]})
         file_links = obj['data'][0]['data'][link_name]
         self.assertEqual(len(file_links), 2)
-        self.assertEqual(file_links[0]['name'], u'a')
-        self.assertEqual(file_links[1]['name'], u'b')
+        # Test that all the filenames listed in the report object map correctly
+        saved_names = set(map(lambda f: str(f['name']), file_links))
+        self.assertEqual(saved_names, set(file_names))
 
     def test_create(self):
+        """ Test the simple report creation with valid data """
         msg = str(uuid4())
         result = self.getImpl().create(self.getContext(), {
             'workspace_name': self.getWsName(),
@@ -126,30 +129,35 @@ class KBaseReportPyTest(unittest.TestCase):
         self.assertEqual(data['text_message'], msg)
 
     def test_create_param_errors(self):
-        # See lib/KBaseReportPy/utils/validation_utils
-        # We're only testing a couple examples here; there are many more error possiblities
-        with self.assertRaises(MultipleInvalid) as er:
+        """
+        See lib/KBaseReportPy/utils/validation_utils
+        We aren't testing every validation rule exhaustively here
+        """
+        # Missing workspace id and name
+        with self.assertRaises(ValueError) as err:
             self.getImpl().create(self.getContext(), {'report': {}})
-        self.assertEqual(str(er.exception), "required key not provided @ data['workspace_name']")
-        with self.assertRaises(MultipleInvalid) as er:
+        # Missing report
+        with self.assertRaises(MultipleInvalid) as err:
             self.getImpl().create(self.getContext(), {'workspace_name': 'x'})
-        self.assertEqual(str(er.exception), "required key not provided @ data['report']")
+        self.assertEqual(str(err.exception), "required key not provided @ data['report']")
 
     def test_create_extended_param_errors(self):
-        # See lib/KBaseReportPy/utils/validation_utils
-        # We're only testing a couple examples here; there are many more error possiblities
-        with self.assertRaises(MultipleInvalid) as er:
+        """
+        See lib/KBaseReportPy/utils/validation_utils
+        We aren't testing every validation rule exhaustively here
+        """
+        # Missing workspace id and name
+        with self.assertRaises(ValueError) as err:
             self.getImpl().create_extended_report(self.getContext(), {})
-        self.assertEqual(str(er.exception), "required key not provided @ data['workspace_name']")
-        with self.assertRaises(MultipleInvalid) as er:
+        with self.assertRaises(MultipleInvalid) as err:
             self.getImpl().create_extended_report(self.getContext(), {'workspace_name': 123})
         self.assertEqual(
-            str(er.exception),
+            str(err.exception),
             "expected basestring for dictionary value @ data['workspace_name']"
         )
 
     def test_invalid_file_links(self):
-        # Test a file link path where the file is non-existent
+        """ Test a file link path where the file is non-existent """
         file = {
             'name': 'a',
             'description': 'a',
@@ -164,6 +172,7 @@ class KBaseReportPyTest(unittest.TestCase):
         self.assertTrue(len(str(err.exception)))
 
     def test_create_extended_report_with_file_paths(self):
+        """ Valid extended report with file_links """
         result = self.getImpl().create_extended_report(self.getContext(), {
             'workspace_name': self.getWsName(),
             'report_object_name': 'my_report',
@@ -180,7 +189,7 @@ class KBaseReportPyTest(unittest.TestCase):
                 }
             ]
         })
-        self.check_extended_result(result, 'file_links')
+        self.check_extended_result(result, 'file_links', ['a', 'b'])
 
     def test_create_extended_report_with_uploaded_files(self):
         result = self.getImpl().create_extended_report(self.getContext(), {
@@ -199,7 +208,7 @@ class KBaseReportPyTest(unittest.TestCase):
                 }
             ]
         })
-        self.check_extended_result(result, 'file_links')
+        self.check_extended_result(result, 'file_links', ['a', 'b'])
 
     def test_create_extended_report_with_uploaded_html_files(self):
         result = self.getImpl().create_extended_report(self.getContext(), {
@@ -218,7 +227,7 @@ class KBaseReportPyTest(unittest.TestCase):
                 }
             ]
         })
-        self.check_extended_result(result, 'html_links')
+        self.check_extended_result(result, 'html_links', ['a', 'b'])
 
     def test_create_extended_report_with_html_paths(self):
         result = self.getImpl().create_extended_report(self.getContext(), {
@@ -237,4 +246,4 @@ class KBaseReportPyTest(unittest.TestCase):
                 }
             ]
         })
-        self.check_extended_result(result, 'file_links')
+        self.check_extended_result(result, 'file_links', ['a', 'b'])

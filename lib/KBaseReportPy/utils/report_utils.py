@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from file_utils import validate_file_array, fetch_or_upload_files
+from file_utils import validate_paths, fetch_or_upload_files
 from uuid import uuid4
 
-""" Utilities for creating reports via DataFileUtil """
+""" Utilities for creating reports using DataFileUtil """
 
 
 def create_report(ctx, params, dfu):
@@ -13,9 +13,8 @@ def create_report(ctx, params, dfu):
     :param dfu: instance of DataFileUtil
     :returns: report data
     """
-    ws_name = params['workspace_name']
     report_name = "report_" + str(uuid4())
-    workspace_id = dfu.ws_name_to_id(ws_name)
+    workspace_id = __get_workspace_id(dfu, params)
     # Set default empty values for various Report parameters
     report_data = {
         'objects_created': [],
@@ -39,24 +38,21 @@ def create_report(ctx, params, dfu):
     }
     obj = dfu.save_objects(save_object_params)[0]
     ref = __get_object_ref(obj)
-    return {
-        'ref': ref,
-        'name': report_name
-    }
+    return {'ref': ref, 'name': report_name}
 
 
 def create_extended(ctx, params, dfu):
     """
     Create an extended report
     This will upload files to shock if you provide scratch paths instead of shock_ids
-    :param ctx: context dict passed into KBaseReportImpl#create
-    :param params: see utils/validation_utils
+    :param ctx: context dict passed from KBaseReportImpl#create
+    :param params: see utils/validation_utils and the KIDL spec
     :param dfu: instance of DataFileUtil
-    :returns: report data
+    :returns: uploaded report data
     """
-    validate_file_array('file_links', params.get('file_links', []))
-    validate_file_array('html_links', params.get('html_links', []))
-    files = fetch_or_upload_files(dfu, params.get('file_links', []))
+    validate_paths('file_links', params.get('file_links', []))
+    validate_paths('html_links', params.get('html_links', []))
+    files = fetch_or_upload_files(dfu, params.get('file_links', []))  # see ./file_utils.py
     html_files = fetch_or_upload_files(dfu, params.get('html_links', []), zip=True)
     report_data = {
         'text_message': params.get('message', ''),
@@ -68,9 +64,8 @@ def create_extended(ctx, params, dfu):
         'html_window_height': params.get('html_window_height'),
         'summary_window_height': params.get('summary_window_height')
     }
-    report_name = params['report_object_name']
-    ws_name = params['workspace_name']
-    workspace_id = dfu.ws_name_to_id(ws_name)
+    report_name = params.get('report_object_name', 'report_' + str(uuid4()))
+    workspace_id = __get_workspace_id(dfu, params)
     save_object_params = {
         'id': workspace_id,
         'objects': [{
@@ -85,6 +80,17 @@ def create_extended(ctx, params, dfu):
     obj = dfu.save_objects(save_object_params)[0]
     ref = __get_object_ref(obj)
     return {'ref': ref, 'name': report_name, 'shock_id': 'xyz'}
+
+
+def __get_workspace_id(dfu, params):
+    """
+    Get the workspace ID from the params, which may either have 'workspace_id'
+    or 'workspace_name'
+    """
+    if 'workspace_name' in params:
+        return dfu.ws_name_to_id(params['workspace_name'])
+    else:
+        return params['workspace_id']
 
 
 def __get_object_ref(obj):

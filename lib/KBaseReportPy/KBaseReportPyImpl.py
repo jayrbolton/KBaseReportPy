@@ -24,7 +24,7 @@ class KBaseReportPy:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/jayrbolton/KBaseReportPy"
-    GIT_COMMIT_HASH = "53e8dac315d3f1950d6359992d946b34a2c736c6"
+    GIT_COMMIT_HASH = "9959ea5b4e2f9bd757dfb421cd3320d58b6d72c0"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -39,11 +39,12 @@ class KBaseReportPy:
         #END_CONSTRUCTOR
         pass
 
+
     def create(self, ctx, params):
         """
         Create a KBaseReport with a brief summary of an App run.
         :param params: instance of type "CreateParams" (Provide the report
-           information. Either workspace name or workspace id is required
+           information. Either workspace name or workspace id is required 
            The structure is: params = { report: { text_message: '', warnings:
            ['w1'], objects_created: [ { ref: 'ws/objid', description: '' }]
            }, workspace_name: 'ws' workspace_id: id }) -> structure:
@@ -97,8 +98,7 @@ class KBaseReportPy:
 
     def create_extended_report(self, ctx, params):
         """
-        A more complex function to create a report that enables the user to
-        specify files and html view that the report should link to
+        A more complex function to create a report that enables the user to specify files and html view that the report should link to
         :param params: instance of type "CreateExtendedReportParams"
            (Parameters used to create a more complex report with file and
            html links The following arguments allow the user to specify the
@@ -162,7 +162,6 @@ class KBaseReportPy:
                              'info is not type dict as required.')
         # return the results
         return [info]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

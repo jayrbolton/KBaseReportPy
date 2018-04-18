@@ -19,6 +19,7 @@ from KBaseReportPy.KBaseReportPyImpl import KBaseReportPy
 from KBaseReportPy.KBaseReportPyServer import MethodContext
 from KBaseReportPy.authclient import KBaseAuth as _KBaseAuth
 from voluptuous import MultipleInvalid
+from uuid import uuid4
 
 
 class KBaseReportPyTest(unittest.TestCase):
@@ -112,16 +113,17 @@ class KBaseReportPyTest(unittest.TestCase):
         self.assertEqual(file_links[1]['name'], u'b')
 
     def test_create(self):
+        msg = str(uuid4())
         result = self.getImpl().create(self.getContext(), {
             'workspace_name': self.getWsName(),
-            'report': {
-                'text_message': 'this is a test',
-            }
+            'report': {'text_message': msg}
         })
         self.assertTrue(len(result[0]['ref']))
         self.assertTrue(len(result[0]['name']))
         self.assertEqual(self.getImpl().status(self.getContext())[0]['state'], 'OK')
-        # TODO fetch the report using dfu by ref, check contents
+        obj = self.dfu.get_objects({'object_refs': [result[0]['ref']]})
+        data = obj['data'][0]['data']
+        self.assertEqual(data['text_message'], msg)
 
     def test_create_param_errors(self):
         # See lib/KBaseReportPy/utils/validation_utils

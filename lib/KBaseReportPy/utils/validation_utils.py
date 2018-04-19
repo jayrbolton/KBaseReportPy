@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from voluptuous import Schema, Required, All, Length, Url
 
 """

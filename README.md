@@ -3,6 +3,8 @@
 
 This is a [KBase SDK](https://github.com/kbase/kb_sdk) app that can be used within other apps to generate output reports in the narrative.
 
+[How to create a KBaseReport](https://github.com/kbase/kb_sdk/blob/master/doc/howto/create_a_report.md)
+
 # API
 
 Install in your own KBase SDK app with:
@@ -58,7 +60,7 @@ The `file_links` and `html_links` params can have the following keys:
 * `name`: (required string) name of the file
 * `description`: (optional string) Readable description of the file
 
-For `html_links` the `path` or `shock_id` can be a zipped directory. If you pass a zipped directory with an `index.html` file into `html_links`, then the report can render that `index.html` directly, and also 
+For `html_links` the `path` or `shock_id` can be a zipped directory. If you pass a zipped directory with an `index.html` file into `html_links`, then the report can render that `index.html` directly. If you have images or other files within your HTML directory, you can link to those from within your `index.html`.
 
 For example, to use an HTML directory:
 

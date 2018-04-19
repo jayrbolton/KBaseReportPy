@@ -1,0 +1,80 @@
+
+# KBaseReportPy
+
+This is a [KBase SDK](https://github.com/kbase/kb_sdk) app that can be used within other apps to generate output reports in the narrative.
+
+[How to create a KBaseReport](https://github.com/kbase/kb_sdk/blob/master/doc/howto/create_a_report.md)
+
+# API
+
+Install in your own KBase SDK app with:
+
+```sh
+$ kb-sdk install KBaseReportPy
+```
+
+## Initialization
+
+Initialize the client using the `callback_url` from your `MyModuleImpl.py` class:
+
+```py
+from KBaseReportPy.KBaseReportPyClient import KBaseReportPy
+...
+report_client = KBaseReportPy(self.callback_url)
+```
+
+## Creating a report
+
+To create a report, use the following parameters:
+
+* `message`: (optional string) basic result message to show in the report
+* `report_object_name`: (optional string) a name to give the workspace object that stores the report (will use job ID if unspecified)
+* `workspace_name`: (required string) string name of your workspace
+* `workspace_id`: (optional integer) id of your workspace
+* `direct_html`: (optional string) raw HTML to show in the report
+* `objects_created`: (optional list of WorkspaceObject) data objects that were created as a result of running your app, such as assemblies or genomes
+* `warnings`: (optional list of strings) any warnings messages generated from running the app
+* `file_links`: (optional list of dicts) files to attach to the report (see the valid key/vals below)
+* `html_links`: (optional list of dicts) files to attach to the report (see the valid key/vals below)
+* `direct_html_link_index`: (optional integer) index in `html_links` that you want to use as the main/default report view
+* `html_window_height`: (optional float) fixed pixel height of your report view
+* `summary_window_height`: (optional float) fixed pixel height of the summary within your report
+
+Use the method **`report_client.create_extended_report(params)`** to create a report object:
+
+```py
+report = report_client.create_extended_report({
+    'direct_html_link_index': 0,
+    'html_links': [html_file],
+    'report_object_name': report_name,
+    'workspace_name': workspace_name
+})
+```
+
+### File links and HTML links
+
+The `file_links` and `html_links` params can have the following keys:
+
+* `shock_id`: (required string) Shock ID for a file. Not required if `path` is present.
+* `path`: (required string) Full file path for a file (in scratch). Not required if `shock_id` is present.
+* `name`: (required string) name of the file
+* `description`: (optional string) Readable description of the file
+
+For `html_links` the `path` or `shock_id` can be a zipped directory. If you pass a zipped directory with an `index.html` file into `html_links`, then the report can render that `index.html` directly. If you have images or other files within your HTML directory, you can link to those from within your `index.html`.
+
+For example, to use an HTML directory:
+
+```
+html_dir = {
+    'path': html_dir_path,
+    'name': 'html_output',
+    'label': 'html_files',
+    'description': 'My HTML report'
+}
+report = report_client.create_extended_report({
+    'html_links': [html_dir],
+    'direct_html_link_index': 0,
+    'report_object_name': report_name,
+    'workspace_name': workspace_name
+})
+```

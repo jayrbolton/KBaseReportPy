@@ -88,7 +88,18 @@ class KBaseReportPyTest(unittest.TestCase):
         wsName = "test_KBaseReportPy_" + str(suffix)
         ret = self.getWsClient().create_workspace({'workspace': wsName})  # noqa
         self.__class__.wsName = wsName
+        self.__class__.wsID = ret[0]
         return wsName
+
+    def getWsID(self):
+        """
+        Return the workspace ID.
+        NOTE that this is custom to this SDK app (not auto-generated)
+        """
+        if hasattr(self.__class__, 'wsName'):
+            return self.__class__.wsID
+        self.getWsName()  # Sets the ID
+        return self.__class__.wsID
 
     def getImpl(self):
         return self.__class__.serviceImpl
@@ -119,6 +130,20 @@ class KBaseReportPyTest(unittest.TestCase):
         msg = str(uuid4())
         result = self.getImpl().create(self.getContext(), {
             'workspace_name': self.getWsName(),
+            'report': {'text_message': msg}
+        })
+        self.assertTrue(len(result[0]['ref']))
+        self.assertTrue(len(result[0]['name']))
+        self.assertEqual(self.getImpl().status(self.getContext())[0]['state'], 'OK')
+        obj = self.dfu.get_objects({'object_refs': [result[0]['ref']]})
+        data = obj['data'][0]['data']
+        self.assertEqual(data['text_message'], msg)
+
+    def test_create_with_workspace_id(self):
+        """ Test the case where we pass in a workspace ID instead of a name """
+        msg = str(uuid4())
+        result = self.getImpl().create(self.getContext(), {
+            'workspace_id': self.getWsID(),
             'report': {'text_message': msg}
         })
         self.assertTrue(len(result[0]['ref']))

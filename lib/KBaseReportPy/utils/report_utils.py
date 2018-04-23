@@ -14,7 +14,7 @@ def create_report(ctx, params, dfu):
     :returns: report data
     """
     report_name = "report_" + str(uuid4())
-    workspace_id = __get_workspace_id(dfu, params)
+    workspace_id = _get_workspace_id(dfu, params)
     # Set default empty values for various Report parameters
     report_data = {
         'objects_created': [],
@@ -37,7 +37,7 @@ def create_report(ctx, params, dfu):
         }]
     }
     obj = dfu.save_objects(save_object_params)[0]
-    ref = __get_object_ref(obj)
+    ref = _get_object_ref(obj)
     return {'ref': ref, 'name': report_name}
 
 
@@ -65,7 +65,7 @@ def create_extended(ctx, params, dfu):
         'summary_window_height': params.get('summary_window_height')
     }
     report_name = params.get('report_object_name', 'report_' + str(uuid4()))
-    workspace_id = __get_workspace_id(dfu, params)
+    workspace_id = _get_workspace_id(dfu, params)
     save_object_params = {
         'id': workspace_id,
         'objects': [{
@@ -78,11 +78,11 @@ def create_extended(ctx, params, dfu):
         }]
     }
     obj = dfu.save_objects(save_object_params)[0]
-    ref = __get_object_ref(obj)
+    ref = _get_object_ref(obj)
     return {'ref': ref, 'name': report_name, 'shock_id': 'xyz'}
 
 
-def __get_workspace_id(dfu, params):
+def _get_workspace_id(dfu, params):
     """
     Get the workspace ID from the params, which may either have 'workspace_id'
     or 'workspace_name'
@@ -93,6 +93,6 @@ def __get_workspace_id(dfu, params):
         return params['workspace_id']
 
 
-def __get_object_ref(obj):
+def _get_object_ref(obj):
     """ Get the reference string from an uploaded dfu object """
     return str(obj[6]) + '/' + str(obj[0]) + '/' + str(obj[4])

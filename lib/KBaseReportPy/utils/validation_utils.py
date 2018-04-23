@@ -20,7 +20,7 @@ def validate_simple_report_params(params):
             'direct_html': basestring,
         }
     })
-    return __require_workspace(schema(params))
+    return _require_workspace(schema(params))
 
 
 def validate_extended_report_params(params):
@@ -39,10 +39,10 @@ def validate_extended_report_params(params):
         'html_window_height': float,
         'summary_window_height': float
     })
-    return __require_workspace(schema(params))
+    return _require_workspace(schema(params))
 
 
-def __require_workspace(params):
+def _require_workspace(params):
     """
     We need either workspace_id or workspace_name, but we don't need both
     voluptuous doesn't have good syntax for that, so we do it manually

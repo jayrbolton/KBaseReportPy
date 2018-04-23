@@ -27,7 +27,7 @@ def fetch_or_upload_files(dfu, files, zip=False):
         elif 'shock_id' in file:
             # Having a 'shock_id' means it is already uploaded
             shock = dfu.own_shock_node({'shock_id': file['shock_id'], 'make_handle': 1})
-        out_files.append(__get_file_data(shock, file))
+        out_files.append(_get_file_data(shock, file))
     return out_files
 
 
@@ -43,7 +43,7 @@ def validate_paths(name, files):
             )
 
 
-def __get_file_data(shock, file):
+def _get_file_data(shock, file):
     """
     Create a report file dict -- corresponds to the LinkedFile in the KIDL spec
     :param shock: a shock dict with id, handle, etc

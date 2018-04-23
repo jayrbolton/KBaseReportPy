@@ -1,3 +1,4 @@
 *.pyc
 test_local
 sdk.cfg
+lib/KBaseReportPy/*.bak*

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from file_utils import validate_paths, fetch_or_upload_files
+from file_utils import fetch_or_upload_files
 from uuid import uuid4
 
 """ Utilities for creating reports using DataFileUtil """
@@ -15,14 +15,9 @@ def create_report(ctx, params, dfu):
     """
     report_name = "report_" + str(uuid4())
     workspace_id = _get_workspace_id(dfu, params)
-    # Set default empty values for various Report parameters
+    # Empty defaults for merging
     report_data = {
-        'objects_created': [],
-        'warnings': [],
-        'file_links': [],
-        'html_links': [],
-        'direct_html': '',
-        'direct_html_link_index': None
+        'objects_created': []
     }
     report_data.update(params['report'])
     save_object_params = {
@@ -32,8 +27,7 @@ def create_report(ctx, params, dfu):
             'data': report_data,
             'name': report_name,
             'meta': {},
-            'hidden': 1,
-            'provenance': ctx['provenance']
+            'hidden': 1
         }]
     }
     obj = dfu.save_objects(save_object_params)[0]
@@ -50,16 +44,16 @@ def create_extended(ctx, params, dfu):
     :param dfu: instance of DataFileUtil
     :returns: uploaded report data
     """
-    validate_paths('file_links', params.get('file_links', []))
-    validate_paths('html_links', params.get('html_links', []))
-    files = fetch_or_upload_files(dfu, params.get('file_links', []))  # see ./file_utils.py
-    html_files = fetch_or_upload_files(dfu, params.get('html_links', []), zip_dir=True)
+    file_links = params.get('file_links', [])
+    html_links = params.get('html_links', [])
+    files = fetch_or_upload_files(dfu, file_links)  # see ./file_utils.py
+    html_files = fetch_or_upload_files(dfu, html_links, zip_dir=True)
     report_data = {
-        'text_message': params.get('message', ''),
+        'text_message': params.get('message'),
         'file_links': files,
         'html_links': html_files,
-        'direct_html': params.get('direct_html', ''),
-        'direct_html_link_index': params.get('direct_html_link_index', 0),
+        'direct_html': params.get('direct_html'),
+        'direct_html_link_index': params.get('direct_html_link_index'),
         'objects_created': params.get('objects_created', []),
         'html_window_height': params.get('html_window_height'),
         'summary_window_height': params.get('summary_window_height')
@@ -73,13 +67,12 @@ def create_extended(ctx, params, dfu):
             'data': report_data,
             'name': report_name,
             'meta': {},
-            'hidden': 1,
-            'provenance': ctx['provenance']
+            'hidden': 1
         }]
     }
     obj = dfu.save_objects(save_object_params)[0]
     ref = _get_object_ref(obj)
-    return {'ref': ref, 'name': report_name, 'shock_id': 'xyz'}
+    return {'ref': ref, 'name': report_name}
 
 
 def _get_workspace_id(dfu, params):
@@ -90,7 +83,7 @@ def _get_workspace_id(dfu, params):
     if 'workspace_name' in params:
         return dfu.ws_name_to_id(params['workspace_name'])
     else:
-        return params['workspace_id']
+        return params.get('workspace_id')
 
 
 def _get_object_ref(obj):

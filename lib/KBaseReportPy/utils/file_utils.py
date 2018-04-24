@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import os
 
 """
-Utilities for validating and uploading files
-We use an instance of DataFileUtil throughout this module
+Utilities for fetching/uploading files
+We use an instance of DataFileUtil here
 """
 
 
@@ -35,19 +34,3 @@ def fetch_or_upload_files(dfu, files, zip_dir=False):
             'URL': shock['handle']['url'] + '/node/' + shock['handle']['id']
         })
     return out_files
-
-
-def validate_paths(name, files):
-    """
-    Raise an exception if any `path` value in `files` is non-existent
-    """
-    for each_file in files:
-        if ('path' in each_file) and (not _file_or_dir(each_file['path'])):
-            raise ValueError(
-                'File path does not exist: ' + each_file['path']
-                + ' . Make sure the file exists in your scratch directory.'
-            )
-
-
-def _file_or_dir(path):
-    return os.path.isfile(path) or os.path.isdir(path)

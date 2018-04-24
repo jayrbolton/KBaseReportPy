@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from voluptuous import Schema, Required, All, Length, Url
 
 """
@@ -40,8 +41,8 @@ def validate_extended_report_params(params):
         'html_window_height': float,
         'summary_window_height': float
     })
-    _validate_files(params.get('html_links', []))
-    _validate_files(params.get('file_links', []))
+    validate_files(params.get('html_links', []))
+    validate_files(params.get('file_links', []))
     _require_workspace_id_or_name(params)
     return schema(params)
 
@@ -59,15 +60,23 @@ def _require_workspace_id_or_name(params):
     return params
 
 
-def _validate_files(files):
+def validate_files(files):
     """
     Validate that every entry in `files` contains either a "shock_id" or "path"
+    Raise an exception if any `path` value in `files` is non-existent
     """
+    def _file_or_dir(path):
+        return os.path.isfile(path) or os.path.isdir(path)
     for f in files:
         if ('path' not in f) and ('shock_id' not in f):
             raise ValueError(
                 'Invalid file object. Either "path" or "shock_id" required: '
                 + str(f)
+            )
+        if ('path' in f) and (not _file_or_dir(f['path'])):
+            raise ValueError(
+                'File path does not exist: ' + f['path']
+                + ' . Make sure the file exists in your scratch directory.'
             )
 
 

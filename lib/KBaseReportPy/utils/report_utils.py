@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from file_utils import fetch_or_upload_files
+import time as _time
+from DataFileUtil.baseclient import ServerError as _DFUError
 from uuid import uuid4
 
 """ Utilities for creating reports using DataFileUtil """
@@ -30,7 +32,7 @@ def create_report(ctx, params, dfu):
             'hidden': 1
         }]
     }
-    obj = dfu.save_objects(save_object_params)[0]
+    obj = _save_object(dfu, save_object_params)
     ref = _get_object_ref(obj)
     return {'ref': ref, 'name': report_name}
 
@@ -70,7 +72,7 @@ def create_extended(ctx, params, dfu):
             'hidden': 1
         }]
     }
-    obj = dfu.save_objects(save_object_params)[0]
+    obj = _save_object(dfu, save_object_params)
     ref = _get_object_ref(obj)
     return {'ref': ref, 'name': report_name}
 
@@ -89,3 +91,12 @@ def _get_workspace_id(dfu, params):
 def _get_object_ref(obj):
     """ Get the reference string from an uploaded dfu object """
     return str(obj[6]) + '/' + str(obj[0]) + '/' + str(obj[4])
+
+
+def _save_object(dfu, params):
+    try:
+        return dfu.save_objects(params)[0]
+    except _DFUError as err:
+        print(str(_time.time()) + ' DataFileUtil exception: ' + str(err))
+    except Exception as err:
+        print(str(_time.time()) + ' Unexpected DataFileUtil exception: ' + str(err))

@@ -20,7 +20,8 @@ def validate_simple_report_params(params):
             'direct_html': basestring,
         }
     })
-    return _require_workspace(schema(params))
+    _require_workspace_id_or_name(params)
+    return schema(params)
 
 
 def validate_extended_report_params(params):
@@ -39,10 +40,13 @@ def validate_extended_report_params(params):
         'html_window_height': float,
         'summary_window_height': float
     })
-    return _require_workspace(schema(params))
+    _validate_files(params.get('html_links', []))
+    _validate_files(params.get('file_links', []))
+    _require_workspace_id_or_name(params)
+    return schema(params)
 
 
-def _require_workspace(params):
+def _require_workspace_id_or_name(params):
     """
     We need either workspace_id or workspace_name, but we don't need both
     voluptuous doesn't have good syntax for that, so we do it manually
@@ -53,6 +57,18 @@ def _require_workspace(params):
             + str(params)
         )
     return params
+
+
+def _validate_files(files):
+    """
+    Validate that every entry in `files` contains either a "shock_id" or "path"
+    """
+    for f in files:
+        if ('path' not in f) and ('shock_id' not in f):
+            raise ValueError(
+                'Invalid file object. Either "path" or "shock_id" required: '
+                + str(f)
+            )
 
 
 # Re-used validations

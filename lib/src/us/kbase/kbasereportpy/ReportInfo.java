@@ -16,6 +16,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * * The reference to the saved KBaseReport. This is the return object for
  * * both create() and create_extended()
+ * * Required arguments:
+ * *    ws_id ref
+ * *    string name
  * </pre>
  * 
  */

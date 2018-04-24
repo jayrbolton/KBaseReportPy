@@ -17,10 +17,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * * Parameters used to create a more complex report with file and html links
  * *
+ * * All parameters are optional.
+ * *
  * * string message - Simple text message to store in report object
  * * list<WorkspaceObject> objects_created - List of result workspace objects that this app
  * *     has created. They will get linked in the report view.
- * * list<string> warnings - A list of warning messages in simple text
+ * * list<string> warnings - A list of plain-text warning messages
  * * list<File> html_links - A list of paths or shock IDs pointing to html files or directories.
  * *     if you pass in paths, they will be zipped and uploaded
  * * int direct_html_link_index - Index in html_links to set the direct/default view in the

@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * * Represents a Workspace object with some brief description text
  * * that can be associated with the object.
+ * * Required arguments:
+ * *     ws_id ref - workspace ID
  * * @optional description
  * </pre>
  * 

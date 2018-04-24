@@ -9,7 +9,7 @@ def create_report(ctx, params, dfu):
     """
     Create a simple report
     :param ctx: context dict passed into KBaseReportImpl#create
-    :param params: see utils/validation_utils
+    :param params: see the KIDL spec for the create() parameters
     :param dfu: instance of DataFileUtil
     :returns: report data
     """
@@ -22,7 +22,7 @@ def create_report(ctx, params, dfu):
         'file_links': [],
         'html_links': [],
         'direct_html': '',
-        'direct_html_link_index': 0
+        'direct_html_link_index': None
     }
     report_data.update(params['report'])
     save_object_params = {
@@ -53,7 +53,7 @@ def create_extended(ctx, params, dfu):
     validate_paths('file_links', params.get('file_links', []))
     validate_paths('html_links', params.get('html_links', []))
     files = fetch_or_upload_files(dfu, params.get('file_links', []))  # see ./file_utils.py
-    html_files = fetch_or_upload_files(dfu, params.get('html_links', []), zip=True)
+    html_files = fetch_or_upload_files(dfu, params.get('html_links', []), zip_dir=True)
     report_data = {
         'text_message': params.get('message', ''),
         'file_links': files,

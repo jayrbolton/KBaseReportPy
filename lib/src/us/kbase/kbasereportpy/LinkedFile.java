@@ -16,6 +16,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * * Represents a file or html archive that the report should link to
  * * Used in Report and the create() function
+ * * Required arguments:
+ * *     handle_ref handle - Handle ID
+ * *     string name - Plain-text name of the file (shown to the user)
+ * *     string URL - shock URL and ID (`shock['handle']['url'] + '/node/' + shock['handle']['id']`)
  * * @optional description label
  * </pre>
  * 

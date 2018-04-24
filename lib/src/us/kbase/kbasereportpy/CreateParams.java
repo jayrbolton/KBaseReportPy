@@ -16,6 +16,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * * Parameters for the create() method
  * * Pass in *either* workspace_name or workspace_id -- only one is needed
+ * * Required arguments:
+ * *    int workspace_id - needed if workspace_name is blank. Preferred as its immutable.
+ * *    string workspace_name - needed if workspace_id is blank. Note that this may change.
+ * *    Report report
  * </pre>
  * 
  */
@@ -34,6 +38,8 @@ public class CreateParams {
      * * A simple Report of a method run in KBase.
      * * Provides a fixed-width, text-based summary message, a list of warnings,
      * * and a list of objects created.
+     * * Required arguments:
+     * *     string text_message - Readable plain-text report message
      * * @optional warnings file_links html_links direct_html direct_html_link_index
      * * @metadata ws length(warnings) as Warnings
      * * @metadata ws length(text_message) as Message Length
@@ -55,6 +61,8 @@ public class CreateParams {
      * * A simple Report of a method run in KBase.
      * * Provides a fixed-width, text-based summary message, a list of warnings,
      * * and a list of objects created.
+     * * Required arguments:
+     * *     string text_message - Readable plain-text report message
      * * @optional warnings file_links html_links direct_html direct_html_link_index
      * * @metadata ws length(warnings) as Warnings
      * * @metadata ws length(text_message) as Message Length
@@ -73,6 +81,8 @@ public class CreateParams {
      * * A simple Report of a method run in KBase.
      * * Provides a fixed-width, text-based summary message, a list of warnings,
      * * and a list of objects created.
+     * * Required arguments:
+     * *     string text_message - Readable plain-text report message
      * * @optional warnings file_links html_links direct_html direct_html_link_index
      * * @metadata ws length(warnings) as Warnings
      * * @metadata ws length(text_message) as Message Length

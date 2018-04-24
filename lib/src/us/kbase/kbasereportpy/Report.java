@@ -18,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * * A simple Report of a method run in KBase.
  * * Provides a fixed-width, text-based summary message, a list of warnings,
  * * and a list of objects created.
+ * * Required arguments:
+ * *     string text_message - Readable plain-text report message
  * * @optional warnings file_links html_links direct_html direct_html_link_index
  * * @metadata ws length(warnings) as Warnings
  * * @metadata ws length(text_message) as Message Length

@@ -18,6 +18,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * * this will get converted into a lower-level LinkedFile before uploading
  * * Pass in *either* a shock_id or a path. If a path is given, then the file
  * * will be uploaded.
+ * * Required arguments:
+ * *     string path - only if shock_id is absent. Can be a file or dir path.
+ * *     string shock_id - only if path is absent.
+ * *     string name - plain-text file name -- shown to the user.
  * * @optional description
  * </pre>
  * 

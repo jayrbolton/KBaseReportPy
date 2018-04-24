@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Original spec-file type: WorkspaceObject</p>
  * <pre>
- * Represents a Workspace object with some brief description text
- * that can be associated with the object.
- * @optional description
+ * * Represents a Workspace object with some brief description text
+ * * that can be associated with the object.
+ * * @optional description
  * </pre>
  * 
  */

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Original spec-file type: LinkedFile</p>
  * <pre>
- * Represents a file or html archive that the report should like to
- * @optional description label
+ * * Represents a file or html archive that the report should link to
+ * * Used in Report and the create() function
+ * * @optional description label
  * </pre>
  * 
  */

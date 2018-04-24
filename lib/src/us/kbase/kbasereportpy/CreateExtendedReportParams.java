@@ -15,25 +15,33 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Original spec-file type: CreateExtendedReportParams</p>
  * <pre>
- * Parameters used to create a more complex report with file and html links
- * The following arguments allow the user to specify the classical data fields in the report object:
- * string message - simple text message to store in report object
- * list <WorkspaceObject> objects_created;
- * list <string> warnings - a list of warning messages in simple text
- * The following argument allows the user to specify the location of html files/directories that the report widget will render <or> link to:
- * list <fileRef> html_links - a list of paths or shock node IDs pointing to a single flat html file or to the top level directory of a website
- * The report widget can render one html view directly. Set one of the following fields to decide which view to render:
- * string direct_html - simple html text that will be rendered within the report widget
- * int  direct_html_link_index - use this to specify the index of the page in html_links to view directly in the report widget (ignored if html_string is set)
- * The following argument allows the user to specify the location of files that the report widget should link for download:
- * list <fileRef> file_links - a list of paths or shock node IDs pointing to a single flat file
- * The following parameters indicate where the report object should be saved in the workspace:
- * string report_object_name - name to use for the report object (job ID is used if left unspecified)
- * html_window_height - height of the html window in the narrative output widget
- * summary_window_height - height of summary window in the narrative output widget
- * One of the following:
- * string workspace_name - name of workspace where object should be saved
- * int workspace_id - id of workspace where object should be saved
+ * * Parameters used to create a more complex report with file and html links
+ * *
+ * * string message - Simple text message to store in report object
+ * * list<WorkspaceObject> objects_created - List of result workspace objects that this app
+ * *     has created. They will get linked in the report view.
+ * * list<string> warnings - A list of warning messages in simple text
+ * * list<File> html_links - A list of paths or shock IDs pointing to html files or directories.
+ * *     if you pass in paths, they will be zipped and uploaded
+ * * int direct_html_link_index - Index in html_links to set the direct/default view in the
+ * *     report (ignored if direct_html is present).
+ * * string direct_html - simple html text that will be rendered within the report widget
+ * *     (do not use both this and html_links -- use one or the other)
+ * * list<File> file_links - a list of file paths or shock node IDs. Allows the user to
+ * *     specify files that the report widget should link for download.
+ * * string report_object_name - name to use for the report object
+ * *     (will be auto-generated if unspecified)
+ * * html_window_height - fixed height in pixels of the html window for the report
+ * * summary_window_height - fixed height in pixels of the summary window for the report
+ * * string workspace_name - name of workspace where object should be saved
+ * * int workspace_id - id of workspace where object should be saved
+ * *
+ * * @metadata ws length(warnings) as Warnings
+ * * @metadata ws length(text_message) as Message Length
+ * * @metadata ws length(objects_created) as Objects Created
+ * * @metadata ws length(html_links) as HTML Links
+ * * @metadata ws length(file_links) as File Links
+ * * @optional message objects_created warnings html_links direct_html direct_html_link_index file_links report_object_name html_window_height summary_window_height
  * </pre>
  * 
  */

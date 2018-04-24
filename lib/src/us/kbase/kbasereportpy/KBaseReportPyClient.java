@@ -165,7 +165,9 @@ public class KBaseReportPyClient {
     /**
      * <p>Original spec-file function name: create</p>
      * <pre>
-     * Create a KBaseReport with a brief summary of an App run.
+     * * Function signature for the create() method -- generate a report for an app run.
+     * * create_extended() is the preferred method if you have html_links and
+     * * file_links, but this is still provided for backwards compatibility.
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbasereportpy.CreateParams CreateParams}
      * @return   parameter "info" of type {@link us.kbase.kbasereportpy.ReportInfo ReportInfo}
@@ -183,7 +185,8 @@ public class KBaseReportPyClient {
     /**
      * <p>Original spec-file function name: create_extended_report</p>
      * <pre>
-     * A more complex function to create a report that enables the user to specify files and html view that the report should link to
+     * * Create a report for the results of an app run -- handles file and html zipping/uploading
+     * * If you are using html_links or file_links, this will be more user-friendly than create()
      * </pre>
      * @param   params   instance of type {@link us.kbase.kbasereportpy.CreateExtendedReportParams CreateExtendedReportParams}
      * @return   parameter "info" of type {@link us.kbase.kbasereportpy.ReportInfo ReportInfo}

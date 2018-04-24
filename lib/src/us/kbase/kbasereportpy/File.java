@@ -13,7 +13,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * <p>Original spec-file type: File</p>
- * 
+ * <pre>
+ * * A file to be linked or uploaded for the report. In extended_report(),
+ * * this will get converted into a lower-level LinkedFile before uploading
+ * * Pass in *either* a shock_id or a path. If a path is given, then the file
+ * * will be uploaded.
+ * * @optional description
+ * </pre>
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

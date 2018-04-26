@@ -49,7 +49,7 @@ def create_extended(ctx, params, dfu):
     file_links = params.get('file_links', [])
     html_links = params.get('html_links', [])
     files = fetch_or_upload_files(dfu, file_links)  # see ./file_utils.py
-    html_files = fetch_or_upload_files(dfu, html_links)
+    html_files = fetch_or_upload_files(dfu, html_links, zip_files=True)
     report_data = {
         'text_message': params.get('message'),
         'file_links': files,
@@ -98,5 +98,7 @@ def _save_object(dfu, params):
         return dfu.save_objects(params)[0]
     except _DFUError as err:
         print(str(_time.time()) + ' DataFileUtil exception: ' + str(err))
+        raise err
     except Exception as err:
         print(str(_time.time()) + ' Unexpected DataFileUtil exception: ' + str(err))
+        raise err

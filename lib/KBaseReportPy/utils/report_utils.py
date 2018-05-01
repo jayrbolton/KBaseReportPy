@@ -7,10 +7,9 @@ from uuid import uuid4
 """ Utilities for creating reports using DataFileUtil """
 
 
-def create_report(ctx, params, dfu):
+def create_report(params, dfu):
     """
     Create a simple report
-    :param ctx: context dict passed into KBaseReportImpl#create
     :param params: see the KIDL spec for the create() parameters
     :param dfu: instance of DataFileUtil
     :returns: report data
@@ -37,11 +36,10 @@ def create_report(ctx, params, dfu):
     return {'ref': ref, 'name': report_name}
 
 
-def create_extended(ctx, params, dfu):
+def create_extended(params, dfu):
     """
     Create an extended report
     This will upload files to shock if you provide scratch paths instead of shock_ids
-    :param ctx: context dict passed from KBaseReportImpl#create
     :param params: see utils/validation_utils and the KIDL spec
     :param dfu: instance of DataFileUtil
     :returns: uploaded report data
@@ -94,6 +92,7 @@ def _get_object_ref(obj):
 
 
 def _save_object(dfu, params):
+    """ Save an object with DFU using error handling """
     try:
         return dfu.save_objects(params)[0]
     except _DFUError as err:

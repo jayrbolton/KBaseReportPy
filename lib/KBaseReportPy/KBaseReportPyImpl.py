@@ -101,7 +101,7 @@ class KBaseReportPy:
         #BEGIN create
         # Validate params
         params = validate_simple_report_params(params)
-        info = report_utils.create_report(ctx, params, self.dfu)
+        info = report_utils.create_report(params, self.dfu)
         #END create
 
         # At some point might do deeper type checking...
@@ -189,7 +189,7 @@ class KBaseReportPy:
         # return variables are: info
         #BEGIN create_extended_report
         params = validate_extended_report_params(params)
-        info = report_utils.create_extended(ctx, params, self.dfu)
+        info = report_utils.create_extended(params, self.dfu)
         #END create_extended_report
 
         # At some point might do deeper type checking...

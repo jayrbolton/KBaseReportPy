@@ -40,7 +40,7 @@ def create_extended(params, dfu):
     """
     Create an extended report
     This will upload files to shock if you provide scratch paths instead of shock_ids
-    :param params: see utils/validation_utils and the KIDL spec
+    :param params: see the KIDL spec for create_extended_report() parameters
     :param dfu: instance of DataFileUtil
     :returns: uploaded report data
     """

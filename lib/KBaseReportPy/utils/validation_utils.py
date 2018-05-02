@@ -41,8 +41,9 @@ def validate_extended_report_params(params):
         'html_window_height': float,
         'summary_window_height': float
     })
-    validate_files(params.get('html_links', []))
-    validate_files(params.get('file_links', []))
+    _validate_files(params.get('html_links', []))
+    _validate_files(params.get('file_links', []))
+    _validate_html_index(params.get('html_links', []), params.get('direct_html_link_index'))
     _require_workspace_id_or_name(params)
     return schema(params)
 
@@ -60,7 +61,7 @@ def _require_workspace_id_or_name(params):
     return params
 
 
-def validate_files(files):
+def _validate_files(files):
     """
     Validate that every entry in `files` contains either a "shock_id" or "path"
     Raise an exception if any `path` value in `files` is non-existent
@@ -78,6 +79,25 @@ def validate_files(files):
                 'File path does not exist: ' + f['path']
                 + ' . Make sure the file exists in your scratch directory.'
             )
+
+
+def _validate_html_index(html_links, index):
+    """
+    Validate that the main file (html_link['name']) is present inside the html directory
+    """
+    if (index is None) or (not html_links):
+        return
+    html_link = html_links[index]
+    if 'path' not in html_link:
+        return
+    main_path = os.path.join(html_link['path'], html_link['name'])
+    if not os.path.isfile(main_path):
+        raise ValueError("".join([
+            "For html_links, the 'name' key should be the filename of the ",
+            "main HTML file for the report page (eg. 'index.html'). ",
+            "The 'name' you provided was not found: ",
+            html_link['name']
+        ]))
 
 
 # Re-used validations

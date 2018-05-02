@@ -13,7 +13,7 @@ def fetch_or_upload_files(dfu, files, zip_files=False):
     Return a list of file dicts that can be passed as 'html_links' or 'file_links' in the report
     :param dfu: DataFileUtil client instance
     :param files: list of file dictionaries (having the File type from the KIDL spec)
-    :returns: list of file dictionaries that that can be uploaded to the workspace for the report
+    :return: list of file dictionaries that that can be uploaded to the workspace for the report
     """
     out_files = []
     for each_file in files:

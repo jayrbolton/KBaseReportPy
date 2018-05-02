@@ -239,6 +239,7 @@ class KBaseReportPyTest(unittest.TestCase):
         result = self.getImpl().create_extended_report(self.getContext(), {
             'workspace_name': self.getWsName(),
             'report_object_name': 'my_report',
+            'direct_html_link_index': 0,
             'html_links': [
                 {
                     'name': 'a',
@@ -258,17 +259,40 @@ class KBaseReportPyTest(unittest.TestCase):
         result = self.getImpl().create_extended_report(self.getContext(), {
             'workspace_name': self.getWsName(),
             'report_object_name': 'my_report',
-            'file_links': [
+            'direct_html_link_index': 0,
+            'html_links': [
                 {
-                    'name': 'a',
+                    'name': 'index.html',
                     'description': 'a',
-                    'path': self.a_file_path
+                    'path': self.a_html_path
                 },
                 {
                     'name': 'b',
                     'description': 'b',
-                    'path': self.b_file_path
+                    'path': self.b_html_path
                 }
             ]
         })
-        self.check_extended_result(result, 'file_links', ['a', 'b'])
+        self.check_extended_result(result, 'html_links', ['index.html', 'b'])
+
+    def test_invalid_extended_report_with_html_paths(self):
+        """ Test the case where they don't set the correct html filename in their html_links """
+        with self.assertRaises(ValueError) as err:
+            self.getImpl().create_extended_report(self.getContext(), {
+                'workspace_name': self.getWsName(),
+                'report_object_name': 'my_report',
+                'direct_html_link_index': 0,
+                'html_links': [
+                    {
+                        'name': 'main.html',  # Invalid filename -- should be "index.html"
+                        'description': 'a',
+                        'path': self.a_html_path
+                    },
+                    {
+                        'name': 'b',
+                        'description': 'b',
+                        'path': self.b_html_path
+                    }
+                ]
+            })
+        self.assertTrue(str(err.exception))

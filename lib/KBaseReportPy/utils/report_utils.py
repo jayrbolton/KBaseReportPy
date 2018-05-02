@@ -12,7 +12,7 @@ def create_report(params, dfu):
     Create a simple report
     :param params: see the KIDL spec for the create() parameters
     :param dfu: instance of DataFileUtil
-    :returns: report data
+    :return: report data
     """
     report_name = "report_" + str(uuid4())
     workspace_id = _get_workspace_id(dfu, params)
@@ -42,7 +42,7 @@ def create_extended(params, dfu):
     This will upload files to shock if you provide scratch paths instead of shock_ids
     :param params: see the KIDL spec for create_extended_report() parameters
     :param dfu: instance of DataFileUtil
-    :returns: uploaded report data
+    :return: uploaded report data - {'ref': r, 'name': n}
     """
     file_links = params.get('file_links', [])
     html_links = params.get('html_links', [])

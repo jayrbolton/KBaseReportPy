@@ -1,51 +1,89 @@
 # -*- coding: utf-8 -*-
 import os
-from voluptuous import Schema, Required, All, Length, Url
+from cerberus import Validator
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
 
 """
 Utilities for validating parameters
-We use the `voluptuous` schema validation library
-More info here: https://pypi.org/project/voluptuous/
+We use the `cerberus` schema validation library: http://docs.python-cerberus.org
 """
 
 
 def validate_simple_report_params(params):
     """ Validate all parameters to KBaseReportPyImpl#create """
-    schema = Schema({
-        'workspace_name': non_empty_string,
-        'workspace_id': int,
-        Required('report'): {
-            'text_message': basestring,
-            'warnings': [basestring],
-            'objects_created': [ws_object],
-            'direct_html': basestring,
+    validator = Validator({
+        'workspace_name': {'type': 'string', 'minlength': 1},
+        'workspace_id': {'type': 'integer', 'min': 0},
+        'report': {
+            'type': 'dict',
+            'required': True,
+            'schema': {
+                'text_message': {'type': 'string'},
+                'direct_html_link_index': {'type': 'integer', 'min': 0},
+                'warnings': {
+                    'type': 'list',
+                    'schema': {'type': 'string'}
+                },
+                'objects_created': {
+                    'type': 'list',
+                    'schema': object_created_schema
+                },
+                'direct_html': {
+                    'type': 'string'
+                },
+                'html_links': {
+                    'type': 'list',
+                    'schema': linked_file_schema
+                },
+                'file_links': {
+                    'type': 'list',
+                    'schema': linked_file_schema
+                }
+            }
         }
     })
     _require_workspace_id_or_name(params)
-    return schema(params)
+    if not validator.validate(params):
+        raise TypeError(_format_errors(validator.errors, params))
+    return params
 
 
 def validate_extended_report_params(params):
     """ Validate all parameters to KBaseReportPyImpl#create_extended_report """
-    schema = Schema({
-        'workspace_name': non_empty_string,
-        'workspace_id': int,
-        'message': basestring,
-        'objects_created': [ws_object],
-        'warnings': [basestring],
-        'html_links': [extended_file],
-        'direct_html': basestring,
-        'direct_html_link_index': int,
-        'file_links': [extended_file],
-        'report_object_name': basestring,
-        'html_window_height': float,
-        'summary_window_height': float
+    validator = Validator({
+        'workspace_name': {'type': 'string', 'minlength': 1},
+        'workspace_id': {'type': 'integer', 'min': 0},
+        'message': {'type': 'string'},
+        'objects_created': {
+            'type': 'list',
+            'schema': object_created_schema,
+        },
+        'warnings': {
+            'type': 'list',
+            'schema': {'type': 'string'}
+        },
+        'html_links': {
+            'type': 'list',
+            'schema': extended_file_schema
+        },
+        'file_links': {
+            'type': 'list',
+            'schema': extended_file_schema
+        },
+        'report_object_name': {'type': 'string'},
+        'html_window_height': {'type': 'integer', 'min': 1},
+        'summary_window_height': {'type': 'integer', 'min': 1},
+        'direct_html_link_index': {'type': 'integer', 'min': 0}
     })
     _validate_files(params.get('html_links', []))
     _validate_files(params.get('file_links', []))
     _validate_html_index(params.get('html_links', []), params.get('direct_html_link_index'))
     _require_workspace_id_or_name(params)
-    return schema(params)
+    if not validator.validate(params):
+        raise TypeError(_format_errors(validator.errors, params))
+    return params
 
 
 def _require_workspace_id_or_name(params):
@@ -54,10 +92,11 @@ def _require_workspace_id_or_name(params):
     voluptuous doesn't have good syntax for that, so we do it manually
     """
     if ('workspace_id' not in params) and ('workspace_name' not in params):
-        raise ValueError(
-            'Invalid params: either `workspace_name` or `workspace_id` is required: '
-            + str(params)
-        )
+        err = {
+            'workspace_name': ['required without workspace_id'],
+            'workspace_id': ['required without workspace_name']
+        }
+        raise TypeError(_format_errors(err, params))
     return params
 
 
@@ -70,15 +109,11 @@ def _validate_files(files):
         return os.path.isfile(path) or os.path.isdir(path)
     for f in files:
         if ('path' not in f) and ('shock_id' not in f):
-            raise ValueError(
-                'Invalid file object. Either "path" or "shock_id" required: '
-                + str(f)
-            )
+            err = {'path': ['required without shock_id'], 'shock_id': ['required without path']}
+            raise TypeError(_format_errors(err, f))
         if ('path' in f) and (not _file_or_dir(f['path'])):
-            raise ValueError(
-                'File path does not exist: ' + f['path']
-                + ' . Make sure the file exists in your scratch directory.'
-            )
+            err = {'path': ['does not exist on filesystem']}
+            raise ValueError(_format_errors(err, f))
 
 
 def _validate_html_index(html_links, index):
@@ -100,29 +135,49 @@ def _validate_html_index(html_links, index):
         ]))
 
 
+def _format_errors(errors, params):
+    """ Make human-readable error messages from a cerberus validation instance """
+    err_str = ""
+    for key in errors:
+        for err_msg in errors[key]:
+            err_str += " * " + key + ": " + err_msg + "\n"
+    return "".join([
+        "KBaseReport parameter validation errors:\n",
+        err_str,
+        "You parameters were:\n",
+        pprint.pformat(params),
+        "\n(View the type spec here: ",
+        # TODO update this URL when it moves and is final:
+        "https://github.com/jayrbolton/KBaseReportPy/blob/master/KBaseReportPy.spec)\n",
+    ])
+
 # Re-used validations
 
-non_empty_string = All(basestring, Length(min=1))
-
 # Workspace object (corresponding to the KIDL spec's WorkspaceObject)
-ws_object = {
-    Required('ref'): non_empty_string,
-    'description': basestring
+object_created_schema = {
+    'ref': {'required': True, 'type': 'string', 'minlength': 1},
+    'description': {'type': 'string'}
 }
 
 # Type validation for .create's LinkedFile (see KIDL spec)
-linked_file = {
-    'handle': basestring,
-    'description': basestring,
-    'name': basestring,
-    'label': basestring,
-    'URL': Url()
+linked_file_schema = {
+    'type': 'dict',
+    'schema': {
+        'handle': {'type': 'string'},
+        'description': {'type': 'string'},
+        'name': {'type': 'string'},
+        'label': {'type': 'string'},
+        'URL': {'type': 'string', 'minlength': 1}
+    }
 }
 
 # Type validation for the extended report's File (see KIDL spec)
-extended_file = {
-    'name': non_empty_string,
-    'shock_id': basestring,
-    'path': basestring,
-    'description': basestring
+extended_file_schema = {
+    'type': 'dict',
+    'schema': {
+        'name': {'type': 'string'},
+        'shock_id': {'type': 'string'},
+        'path': {'type': 'string'},
+        'description': {'type': 'string'}
+    }
 }

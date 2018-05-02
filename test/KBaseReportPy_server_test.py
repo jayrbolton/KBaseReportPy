@@ -18,7 +18,6 @@ from biokbase.workspace.client import Workspace as workspaceService
 from KBaseReportPy.KBaseReportPyImpl import KBaseReportPy
 from KBaseReportPy.KBaseReportPyServer import MethodContext
 from KBaseReportPy.authclient import KBaseAuth as _KBaseAuth
-from voluptuous import MultipleInvalid
 from uuid import uuid4
 
 
@@ -159,12 +158,13 @@ class KBaseReportPyTest(unittest.TestCase):
         We aren't testing every validation rule exhaustively here
         """
         # Missing workspace id and name
-        with self.assertRaises(ValueError) as err:
+        with self.assertRaises(TypeError) as err:
             self.getImpl().create(self.getContext(), {'report': {}})
         # Missing report
-        with self.assertRaises(MultipleInvalid) as err:
+        with self.assertRaises(TypeError) as err:
             self.getImpl().create(self.getContext(), {'workspace_name': 'x'})
-        self.assertEqual(str(err.exception), "required key not provided @ data['report']")
+        print('Exception:\n', str(err.exception))
+        self.assertTrue(str(err.exception))
 
     def test_create_extended_param_errors(self):
         """
@@ -172,14 +172,12 @@ class KBaseReportPyTest(unittest.TestCase):
         We aren't testing every validation rule exhaustively here
         """
         # Missing workspace id and name
-        with self.assertRaises(ValueError) as err:
+        with self.assertRaises(TypeError) as err:
             self.getImpl().create_extended_report(self.getContext(), {})
-        with self.assertRaises(MultipleInvalid) as err:
+        with self.assertRaises(TypeError) as err:
             self.getImpl().create_extended_report(self.getContext(), {'workspace_name': 123})
-        self.assertEqual(
-            str(err.exception),
-            "expected basestring for dictionary value @ data['workspace_name']"
-        )
+        print('Exception:\n', str(err.exception))
+        self.assertTrue(str(err.exception))
 
     def test_invalid_file_links(self):
         """ Test a file link path where the file is non-existent """

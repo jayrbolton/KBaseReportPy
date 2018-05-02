@@ -10,7 +10,7 @@ MAINTAINER KBase Developer
 
 # Install pip dependencies
 RUN pip install -U pip
-RUN pip install voluptuous==0.11.*
+RUN pip install cerberus==1.2
 
 # -----------------------------------------
 

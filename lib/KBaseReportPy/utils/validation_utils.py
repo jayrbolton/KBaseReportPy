@@ -155,8 +155,11 @@ def _format_errors(errors, params):
 
 # Workspace object (corresponding to the KIDL spec's WorkspaceObject)
 object_created_schema = {
-    'ref': {'required': True, 'type': 'string', 'minlength': 1},
-    'description': {'type': 'string'}
+    'type': 'dict',
+    'schema': {
+        'ref': {'required': True, 'type': 'string', 'minlength': 1},
+        'description': {'type': 'string'}
+    }
 }
 
 # Type validation for .create's LinkedFile (see KIDL spec)

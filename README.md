@@ -64,13 +64,14 @@ For `html_links`, you can pass in the path for a directory that contains website
 
 Any additional images or linked files that live in your HTML directory will be accessible from your `index.html` and can be linked to and rendered in your report widget.
 
+> Important: Be sure to set the name of your main HTML file (eg. `index.html`) to the `'name'` key in your `html_links`.
+
 For example, to use an HTML directory:
 
 ```
 html_dir = {
     'path': html_dir_path,
-    'name': 'html_output',
-    'label': 'html_files',
+    'name': 'index.html',  # MUST match the filename of the main html
     'description': 'My HTML report'
 }
 report = report_client.create_extended_report({

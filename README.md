@@ -25,12 +25,12 @@ report_client = KBaseReportPy(self.callback_url)
 
 ## Creating a report
 
-To create a report, use the following parameters:
+Use the method **`report_client.create_extended_report(params)`** to create a report object along with the following parameters, passed as a dictionary:
 
 * `message`: (optional string) basic result message to show in the report
 * `report_object_name`: (optional string) a name to give the workspace object that stores the report (will use job ID if unspecified)
 * `workspace_id`: (optional integer) id of your workspace. Preferred over `workspace_name` as it's immutable. Required if `workspace_name` is absent.
-* `workspace_name`: (required string) string name of your workspace. Requried if `workspace_id` is absent.
+* `workspace_name`: (optional string) string name of your workspace. Requried if `workspace_id` is absent.
 * `direct_html`: (optional string) raw HTML to show in the report
 * `objects_created`: (optional list of WorkspaceObject) data objects that were created as a result of running your app, such as assemblies or genomes
 * `warnings`: (optional list of strings) any warnings messages generated from running the app
@@ -40,7 +40,7 @@ To create a report, use the following parameters:
 * `html_window_height`: (optional float) fixed pixel height of your report view
 * `summary_window_height`: (optional float) fixed pixel height of the summary within your report
 
-Use the method **`report_client.create_extended_report(params)`** to create a report object:
+_Example usage:_
 
 ```py
 report = report_client.create_extended_report({
@@ -60,18 +60,18 @@ The `file_links` and `html_links` params can have the following keys:
 * `name`: (required string) name of the file
 * `description`: (optional string) Readable description of the file
 
-For `html_links`, you can pass in the path for a directory that contains website data and an `index.html` file. KBaseReport will automatically zip up the directory for you and upload it to the workspace. If you set the `html_links` index of that HTML directory in `direct_html_link_index`, then the report widget will render your full html directory in an iframe.
+For the `path` parameter, this can either point to a single file or a directory. If it points to a directory, then it will be zipped and uploaded for you.
 
-Any additional images or linked files that live in your HTML directory will be accessible from your `index.html` and can be linked to and rendered in your report widget.
+If you pass in a directory as your `path` for HTML reports, you can include additional files in that directory, such as images or PDFs. You can link to those files from your main HTML page by using relative links.
 
-> Important: Be sure to set the name of your main HTML file (eg. `index.html`) to the `'name'` key in your `html_links`.
+> Important: Be sure to set the name of your main HTML file (eg. `index.html`) to the `'name'` key in your `html_links` dictionary.
 
-For example, to use an HTML directory:
+For example, to generate an HTML report:
 
 ```
 html_dir = {
     'path': html_dir_path,
-    'name': 'index.html',  # MUST match the filename of the main html
+    'name': 'index.html',  # MUST match the filename of your main html page
     'description': 'My HTML report'
 }
 report = report_client.create_extended_report({

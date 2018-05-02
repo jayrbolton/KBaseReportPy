@@ -27,7 +27,7 @@ module KBaseReportPy {
     } WorkspaceObject;
 
     /*
-     * Represents a file or html archive that the report should link to
+     * Represents a file or html archive that the report links to
      * Used in Report and the create() function
      * Required arguments:
      *     handle_ref handle - Handle ID

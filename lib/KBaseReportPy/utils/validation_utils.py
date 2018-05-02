@@ -89,7 +89,7 @@ def validate_extended_report_params(params):
 def _require_workspace_id_or_name(params):
     """
     We need either workspace_id or workspace_name, but we don't need both
-    voluptuous doesn't have good syntax for that, so we do it manually
+    cerberus doesn't have good syntax for that, so we do it manually
     """
     if ('workspace_id' not in params) and ('workspace_name' not in params):
         err = {

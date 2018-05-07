@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from file_utils import fetch_or_upload_files
+from file_utils import fetch_or_upload_file_links, fetch_or_upload_html_links
 import time as _time
 from DataFileUtil.baseclient import ServerError as _DFUError
 from uuid import uuid4
@@ -46,8 +46,8 @@ def create_extended(params, dfu):
     """
     file_links = params.get('file_links', [])
     html_links = params.get('html_links', [])
-    files = fetch_or_upload_files(dfu, file_links)  # see ./file_utils.py
-    html_files = fetch_or_upload_files(dfu, html_links, zip_files=True)
+    files = fetch_or_upload_file_links(dfu, file_links)  # see ./file_utils.py
+    html_files = fetch_or_upload_html_links(dfu, html_links)
     report_data = {
         'text_message': params.get('message'),
         'file_links': files,

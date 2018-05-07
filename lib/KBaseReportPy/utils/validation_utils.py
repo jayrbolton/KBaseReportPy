@@ -125,6 +125,10 @@ def _validate_html_index(html_links, index):
     html_link = html_links[index]
     if 'path' not in html_link:
         return
+    # If they passed in a file, we don't need to validate
+    if os.path.isfile(html_link['path']):
+        return
+    # If they passed a directory, check that the 'name' exists as a file inside that dir
     main_path = os.path.join(html_link['path'], html_link['name'])
     if not os.path.isfile(main_path):
         raise ValueError("".join([

@@ -57,8 +57,8 @@ class KBaseReportPyTest(unittest.TestCase):
         cls.dfu = DataFileUtil(cls.callback_url)
         cls.a_html_path = os.path.join(cls.scratch, 'a_html')
         cls.b_html_path = os.path.join(cls.scratch, 'b_html')
-        shutil.copytree(os.path.join(dirname, 'data/a_html'), cls.a_html_path)
-        shutil.copytree(os.path.join(dirname, 'data/b_html'), cls.b_html_path)
+        shutil.copytree(os.path.join(dirname, 'data', 'a_html'), cls.a_html_path)
+        shutil.copytree(os.path.join(dirname, 'data', 'b_html'), cls.b_html_path)
         cls.a_file_path = os.path.join(cls.scratch, 'a.txt')
         cls.b_file_path = os.path.join(cls.scratch, 'b.txt')
         shutil.copy2(os.path.join(dirname, 'data/a.txt'), cls.a_file_path)
@@ -119,7 +119,7 @@ class KBaseReportPyTest(unittest.TestCase):
         self.assertTrue(len(result[0]['name']))
         obj = self.dfu.get_objects({'object_refs': [result[0]['ref']]})
         file_links = obj['data'][0]['data'][link_name]
-        self.assertEqual(len(file_links), 2)
+        self.assertEqual(len(file_links), len(file_names))
         # Test that all the filenames listed in the report object map correctly
         saved_names = set(map(lambda f: str(f['name']), file_links))
         self.assertEqual(saved_names, set(file_names))
@@ -163,7 +163,6 @@ class KBaseReportPyTest(unittest.TestCase):
         # Missing report
         with self.assertRaises(TypeError) as err:
             self.getImpl().create(self.getContext(), {'workspace_name': 'x'})
-        print('Exception:\n', str(err.exception))
         self.assertTrue(str(err.exception))
 
     def test_create_extended_param_errors(self):
@@ -176,7 +175,6 @@ class KBaseReportPyTest(unittest.TestCase):
             self.getImpl().create_extended_report(self.getContext(), {})
         with self.assertRaises(TypeError) as err:
             self.getImpl().create_extended_report(self.getContext(), {'workspace_name': 123})
-        print('Exception:\n', str(err.exception))
         self.assertTrue(str(err.exception))
 
     def test_invalid_file_links(self):
@@ -273,24 +271,36 @@ class KBaseReportPyTest(unittest.TestCase):
         })
         self.check_extended_result(result, 'html_links', ['index.html', 'b'])
 
+    def test_create_extended_report_with_html_single_file(self):
+        result = self.getImpl().create_extended_report(self.getContext(), {
+            'workspace_name': self.getWsName(),
+            'report_object_name': 'my_report',
+            'direct_html_link_index': 0,
+            'html_links': [
+                {
+                    'name': 'index.html',
+                    'description': 'a',
+                    'path': self.a_html_path
+                },
+                {
+                    'name': 'b',
+                    'description': 'b',
+                    'path': self.b_html_path
+                }
+            ]
+        })
+        self.check_extended_result(result, 'html_links', ['index.html', 'b'])
+
     def test_invalid_extended_report_with_html_paths(self):
-        """ Test the case where they don't set the correct html filename in their html_links """
-        with self.assertRaises(ValueError) as err:
-            self.getImpl().create_extended_report(self.getContext(), {
-                'workspace_name': self.getWsName(),
-                'report_object_name': 'my_report',
-                'direct_html_link_index': 0,
-                'html_links': [
-                    {
-                        'name': 'main.html',  # Invalid filename -- should be "index.html"
-                        'description': 'a',
-                        'path': self.a_html_path
-                    },
-                    {
-                        'name': 'b',
-                        'description': 'b',
-                        'path': self.b_html_path
-                    }
-                ]
-            })
-        self.assertTrue(str(err.exception))
+        """ Test the case where they set a single HTML file as their 'path' """
+        result = self.getImpl().create_extended_report(self.getContext(), {
+            'workspace_name': self.getWsName(),
+            'direct_html_link_index': 0,
+            'html_links': [
+                {
+                    'name': 'main.html',
+                    'path': os.path.join(self.a_html_path, 'index.html')
+                }
+            ]
+        })
+        self.check_extended_result(result, 'html_links', ['main.html'])

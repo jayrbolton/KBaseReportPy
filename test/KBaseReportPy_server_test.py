@@ -259,12 +259,10 @@ class KBaseReportPyTest(unittest.TestCase):
             'html_links': [
                 {
                     'name': 'index.html',
-                    'description': 'a',
                     'path': self.a_html_path
                 },
                 {
                     'name': 'b',
-                    'description': 'b',
                     'path': self.b_html_path
                 }
             ]
@@ -284,8 +282,7 @@ class KBaseReportPyTest(unittest.TestCase):
                 },
                 {
                     'name': 'b',
-                    'description': 'b',
-                    'path': self.b_html_path
+                    'description': 'b', 'path': self.b_html_path
                 }
             ]
         })

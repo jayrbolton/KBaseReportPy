@@ -32,7 +32,7 @@ module KBaseReportPy {
      * Required arguments:
      *     handle_ref handle - Handle ID
      *     string name - Plain-text name of the file (shown to the user)
-     *     string URL - shock URL and ID (`shock['handle']['url'] + '/node/' + shock['handle']['id']`)
+     *     string URL - URL of shock node: <shock-url>/node/<shock-handle-id>
      * @optional description label
      */
     typedef structure {

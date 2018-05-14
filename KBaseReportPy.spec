@@ -1,6 +1,6 @@
 /*
-    Module for a simple WS data object report type.
-*/
+ *  Module for workspace data object reports, which show the results of running a job in an SDK app.
+ */
 module KBaseReportPy {
     /*
      * Workspace ID reference - eg. 'ws/id/ver'

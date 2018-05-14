@@ -27,8 +27,8 @@ module KBaseReportPy {
     } WorkspaceObject;
 
     /*
-     * Represents a file or html archive that the report links to
-     * Used in Report and the create() function
+     * Represents a file or html archive that the report links to. Used
+     * behind-the-scenes in the workspace.
      * Required arguments:
      *     handle_ref handle - Handle ID
      *     string name - Plain-text name of the file (shown to the user)
@@ -44,9 +44,8 @@ module KBaseReportPy {
     } LinkedFile;
 
     /*
-     * A simple Report of a method run in KBase.
-     * Provides a fixed-width, text-based summary message, a list of warnings,
-     * and a list of objects created.
+     * A Report of a method run in KBase. This is used behind-the-scenes in the
+     * workspace for the simple create() method
      * Required arguments:
      *     string text_message - Readable plain-text report message
      * @optional warnings file_links html_links direct_html direct_html_link_index
@@ -65,15 +64,35 @@ module KBaseReportPy {
     } Report;
 
     /*
+     * A simple report for use in create()
+     * Required arguments:
+     *     string text_message - Readable plain-text report message
+     * Optional arguments:
+     *     list<WorkspaceObject> objects_created - List of result workspace objects that this app
+     *         has created. They will get linked in the report view.
+     *     list<string> warnings - A list of plain-text warning messages
+     *     string direct_html - simple html text that will be rendered within the report widget
+     * @optional text_message warnings objects_created
+     * @metadata ws length(warnings) as Warnings
+     * @metadata ws length(text_message) as Message Length
+     * @metadata ws length(objects_created) as Objects Created
+     */
+    typedef structure {
+        string text_message;
+        list<string> warnings;
+        list<WorkspaceObject> objects_created;
+    } SimpleReport;
+
+    /*
      * Parameters for the create() method
      * Pass in *either* workspace_name or workspace_id -- only one is needed
      * Required arguments:
-     *    int workspace_id - needed if workspace_name is blank. Preferred as its immutable.
-     *    string workspace_name - needed if workspace_id is blank. Note that this may change.
-     *    Report report
+     *     SimpleReport report
+     *     string workspace_name - needed if workspace_id is blank. Note that this may change.
+     *     int workspace_id - needed if workspace_name is blank. Preferred as its immutable.
      */
     typedef structure {
-        Report report;
+        SimpleReport report;
         string workspace_name;
         int workspace_id;
     } CreateParams;

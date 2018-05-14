@@ -21,7 +21,6 @@ def validate_simple_report_params(params):
             'required': True,
             'schema': {
                 'text_message': {'type': 'string'},
-                'direct_html_link_index': {'type': 'integer', 'min': 0},
                 'warnings': {
                     'type': 'list',
                     'schema': {'type': 'string'}
@@ -32,14 +31,6 @@ def validate_simple_report_params(params):
                 },
                 'direct_html': {
                     'type': 'string'
-                },
-                'html_links': {
-                    'type': 'list',
-                    'schema': linked_file_schema
-                },
-                'file_links': {
-                    'type': 'list',
-                    'schema': linked_file_schema
                 }
             }
         }

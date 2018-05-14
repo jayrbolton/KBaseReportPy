@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import shutil
 from uuid import uuid4
 
 """
@@ -51,7 +52,7 @@ def fetch_or_upload_html_links(dfu, files):
                 os.makedirs(new_dir)
                 # Move the file to dir/name
                 new_path = os.path.join(new_dir, each_file['name'])
-                os.rename(each_file['path'], new_path)
+                shutil.move(each_file['path'], new_path)
                 each_file['path'] = new_dir
             shock = dfu.file_to_shock({
                 'file_path': each_file['path'],

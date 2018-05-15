@@ -19,6 +19,9 @@ module KBaseReportPy {
      * that can be associated with the object.
      * Required arguments:
      *     ws_id ref - workspace ID
+     * Optional arguments:
+     *     string description - A plaintext, human-readable description of the
+     *         object created.
      * @optional description
      */
     typedef structure {
@@ -44,9 +47,8 @@ module KBaseReportPy {
     } LinkedFile;
 
     /*
-     * A simple Report of a method run in KBase.
-     * Provides a fixed-width, text-based summary message, a list of warnings,
-     * and a list of objects created.
+     * A simple Report of a method run in KBase. Provides a text-based summary
+     * message, a list of warnings, and a list of objects created.
      * Required arguments:
      *     string text_message - Readable plain-text report message
      * @optional warnings file_links html_links direct_html direct_html_link_index
@@ -68,7 +70,7 @@ module KBaseReportPy {
      * Parameters for the create() method
      * Pass in *either* workspace_name or workspace_id -- only one is needed
      * Required arguments:
-     *    int workspace_id - needed if workspace_name is blank. Preferred as its immutable.
+     *    int workspace_id - needed if workspace_name is blank. Preferred as it is immutable.
      *    string workspace_name - needed if workspace_id is blank. Note that this may change.
      *    Report report
      */
@@ -81,9 +83,12 @@ module KBaseReportPy {
     /*
      * The reference to the saved KBaseReport. This is the return object for
      * both create() and create_extended()
-     * Required arguments:
-     *    ws_id ref
-     *    string name
+     * Returned data:
+     *    ws_id ref - reference to a workspace object in the form of
+     *        workspace_id/object_id/version. This is a reference to the saved data
+     *        from creating the report.
+     *    string name - Plaintext unique name for the report. In
+     *        create_extended, this can optionally be set in a parameter.
      */
     typedef structure {
         ws_id ref;
@@ -94,19 +99,21 @@ module KBaseReportPy {
      * Function signature for the create() method -- generate a report for an app run.
      * create_extended() is the preferred method if you have html_links and
      * file_links, but this is still provided for backwards compatibility.
+     * @deprecated KBaseReportPy.create_extended_report
      */
     funcdef create(CreateParams params)
         returns (ReportInfo info) authentication required;
 
     /*
-     * A file to be linked or uploaded for the report. In extended_report(),
-     * this will get converted into a lower-level LinkedFile before uploading
-     * Pass in *either* a shock_id or a path. If a path is given, then the file
-     * will be uploaded.
+     * A file to be linked in the report. Pass in *either* a shock_id or a
+     * path. If a path to a file is given, then the file will be uploaded. If a
+     * path to a directory is given, then it will be zipped and uploaded.
      * Required arguments:
-     *     string path - only if shock_id is absent. Can be a file or dir path.
-     *     string shock_id - only if path is absent.
-     *     string name - plain-text file name -- shown to the user.
+     *     string path - Can be a file or directory path. Required if shock_id is absent.
+     *     string shock_id - Shock node ID. Required if path is absent.
+     *     string name - Plain-text file name -- shown to the user.
+     * Optional arguments:
+     *     string description - A plaintext, human-readable description of the file.
      * @optional description
      */
     typedef structure {
@@ -130,21 +137,18 @@ module KBaseReportPy {
      * int direct_html_link_index - Index in html_links to set the direct/default view in the
      *     report (ignored if direct_html is present).
      * string direct_html - simple html text that will be rendered within the report widget
-     *     (do not use both this and html_links -- use one or the other)
+     *     If you pass in both direct_html and html_links, then direct_html will be ignored.
      * list<File> file_links - a list of file paths or shock node IDs. Allows the user to
      *     specify files that the report widget should link for download.
      * string report_object_name - name to use for the report object
      *     (will be auto-generated if unspecified)
      * html_window_height - fixed height in pixels of the html window for the report
      * summary_window_height - fixed height in pixels of the summary window for the report
-     * string workspace_name - name of workspace where object should be saved
-     * int workspace_id - id of workspace where object should be saved
+     * string workspace_name - name of workspace where object should be saved.
+     *     Required if workspace_id is not present.
+     * int workspace_id - id of workspace where object should be saved.
+     *     Required if workspace_name is not present.
      *
-     * @metadata ws length(warnings) as Warnings
-     * @metadata ws length(text_message) as Message Length
-     * @metadata ws length(objects_created) as Objects Created
-     * @metadata ws length(html_links) as HTML Links
-     * @metadata ws length(file_links) as File Links
      * @optional message objects_created warnings html_links direct_html direct_html_link_index file_links report_object_name html_window_height summary_window_height
      */
     typedef structure {

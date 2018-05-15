@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Original spec-file type: LinkedFile</p>
  * <pre>
- * * Represents a file or html archive that the report should link to
+ * * Represents a file or html archive that the report links to
  * * Used in Report and the create() function
  * * Required arguments:
  * *     handle_ref handle - Handle ID
  * *     string name - Plain-text name of the file (shown to the user)
- * *     string URL - shock URL and ID (`shock['handle']['url'] + '/node/' + shock['handle']['id']`)
+ * *     string URL - URL of shock node: <shock-url>/node/<shock-handle-id>
  * * @optional description label
  * </pre>
  * 

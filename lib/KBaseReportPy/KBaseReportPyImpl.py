@@ -13,7 +13,7 @@ class KBaseReportPy:
     KBaseReportPy
 
     Module Description:
-    Module for a simple WS data object report type.
+    Module for workspace data object reports, which show the results of running a job in an SDK app.
     '''
 
     ######## WARNING FOR GEVENT USERS ####### noqa
@@ -24,7 +24,7 @@ class KBaseReportPy:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/jayrbolton/KBaseReportPy"
-    GIT_COMMIT_HASH = "f46cce92dfc76e8460643116c5efa53ba0228c73"
+    GIT_COMMIT_HASH = "07a50ca5e635b0f794e9b8ad33c4228d5a11e537"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -68,23 +68,22 @@ class KBaseReportPy:
            Workspace ID reference - eg. 'ws/id/ver' * @id ws), parameter
            "description" of String, parameter "file_links" of list of type
            "LinkedFile" (* Represents a file or html archive that the report
-           should link to * Used in Report and the create() function *
-           Required arguments: *     handle_ref handle - Handle ID *    
-           string name - Plain-text name of the file (shown to the user) *   
-           string URL - shock URL and ID (`shock['handle']['url'] + '/node/'
-           + shock['handle']['id']`) * @optional description label) ->
-           structure: parameter "handle" of type "handle_ref" (* Reference to
-           a handle ID * @id handle), parameter "description" of String,
-           parameter "name" of String, parameter "label" of String, parameter
-           "URL" of String, parameter "html_links" of list of type
-           "LinkedFile" (* Represents a file or html archive that the report
-           should link to * Used in Report and the create() function *
-           Required arguments: *     handle_ref handle - Handle ID *    
-           string name - Plain-text name of the file (shown to the user) *   
-           string URL - shock URL and ID (`shock['handle']['url'] + '/node/'
-           + shock['handle']['id']`) * @optional description label) ->
-           structure: parameter "handle" of type "handle_ref" (* Reference to
-           a handle ID * @id handle), parameter "description" of String,
+           links to * Used in Report and the create() function * Required
+           arguments: *     handle_ref handle - Handle ID *     string name -
+           Plain-text name of the file (shown to the user) *     string URL -
+           URL of shock node: <shock-url>/node/<shock-handle-id> * @optional
+           description label) -> structure: parameter "handle" of type
+           "handle_ref" (* Reference to a handle ID * @id handle), parameter
+           "description" of String, parameter "name" of String, parameter
+           "label" of String, parameter "URL" of String, parameter
+           "html_links" of list of type "LinkedFile" (* Represents a file or
+           html archive that the report links to * Used in Report and the
+           create() function * Required arguments: *     handle_ref handle -
+           Handle ID *     string name - Plain-text name of the file (shown
+           to the user) *     string URL - URL of shock node:
+           <shock-url>/node/<shock-handle-id> * @optional description label)
+           -> structure: parameter "handle" of type "handle_ref" (* Reference
+           to a handle ID * @id handle), parameter "description" of String,
            parameter "name" of String, parameter "label" of String, parameter
            "URL" of String, parameter "direct_html" of String, parameter
            "direct_html_link_index" of Long, parameter "workspace_name" of

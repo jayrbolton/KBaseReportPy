@@ -9,8 +9,7 @@ MAINTAINER KBase Developer
 # RUN apt-get update
 
 # Install pip dependencies
-RUN pip install -U pip
-RUN pip install cerberus==1.2
+RUN pip install -U pip cerberus==1.2
 
 # -----------------------------------------
 

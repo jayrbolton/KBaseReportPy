@@ -28,7 +28,7 @@ report_client = KBaseReportPy(self.callback_url)
 Use the method **`report_client.create_extended_report(params)`** to create a report object along with the following parameters, passed as a dictionary:
 
 * `message`: (optional string) basic result message to show in the report
-* `report_object_name`: (optional string) a name to give the workspace object that stores the report (will use job ID if unspecified)
+* `report_object_name`: (optional string) a name to give the workspace object that stores the report.
 * `workspace_id`: (optional integer) id of your workspace. Preferred over `workspace_name` as it's immutable. Required if `workspace_name` is absent.
 * `workspace_name`: (optional string) string name of your workspace. Requried if `workspace_id` is absent.
 * `direct_html`: (optional string) raw HTML to show in the report

@@ -12,7 +12,7 @@ We use an instance of DataFileUtil here
 def fetch_or_upload_file_links(dfu, files):
     """
     Given a list of dictionaries of files for the `file_links` parameter in an extended_report
-    Fetch by shock ID, upload the file, or zip a directory
+    Fetch by shock ID or upload the file or zipped directory
     :param dfu: DataFileUtil client instance
     :param files: list of file dictionaries (having the File type from the KIDL spec)
     :return: list of file dictionaries that that can be uploaded to the workspace for the report
@@ -52,7 +52,7 @@ def fetch_or_upload_html_links(dfu, files):
                 os.makedirs(new_dir)
                 # Move the file to dir/name
                 new_path = os.path.join(new_dir, each_file['name'])
-                shutil.copy(each_file['path'], new_path)
+                shutil.copy2(each_file['path'], new_path)
                 each_file['path'] = new_dir
             shock = dfu.file_to_shock({
                 'file_path': each_file['path'],
@@ -66,12 +66,12 @@ def fetch_or_upload_html_links(dfu, files):
     return out_files
 
 
-def _create_file_link(f, shock):
+def _create_file_link(file_data, shock):
     """ This corresponds to the LinkedFile type in the KIDL spec """
     return {
         'handle': shock['handle']['hid'],
-        'description': f.get('description'),
-        'name': f.get('name', ''),
-        'label': f.get('label', ''),
+        'description': file_data.get('description'),
+        'name': file_data.get('name', ''),
+        'label': file_data.get('label', ''),
         'URL': shock['handle']['url'] + '/node/' + shock['handle']['id']
     }

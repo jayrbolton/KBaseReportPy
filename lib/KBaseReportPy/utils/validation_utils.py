@@ -66,7 +66,8 @@ def validate_extended_report_params(params):
         'report_object_name': {'type': 'string'},
         'html_window_height': {'type': 'integer', 'min': 1},
         'summary_window_height': {'type': 'integer', 'min': 1},
-        'direct_html_link_index': {'type': 'integer', 'min': 0}
+        'direct_html_link_index': {'type': 'integer', 'min': 0},
+        'direct_html': {'type': 'string'}
     })
     _validate_files(params.get('html_links', []))
     _validate_files(params.get('file_links', []))

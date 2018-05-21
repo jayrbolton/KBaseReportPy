@@ -50,6 +50,7 @@ def fetch_or_upload_html_links(dfu, files):
                 # If it is not a directory, we have to move it into one before zipping
                 new_dir = os.path.join(os.path.dirname(each_file['path']), str(uuid4()))
                 os.makedirs(new_dir)
+                os.chmod(new_dir, 0o777)
                 # Move the file to dir/name
                 new_path = os.path.join(new_dir, each_file['name'])
                 shutil.copy2(each_file['path'], new_path)

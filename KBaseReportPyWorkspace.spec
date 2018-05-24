@@ -2,7 +2,7 @@
  * Behind-the-scenes types for report data that gets uses on the workspace. 
  * These objects are generated in this module from the API types found in KBaseReportPy
  */
-module KBaseReportPyWorkspace {
+module KBaseReport {
     /*
      * Workspace ID reference - eg. 'ws/id/ver'
      * @id ws

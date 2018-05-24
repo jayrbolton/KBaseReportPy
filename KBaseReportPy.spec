@@ -1,8 +1,28 @@
-#include <KBaseReportPyWorkspace.spec>
 /*
  *  Module for workspace data object reports, which show the results of running a job in an SDK app.
  */
 module KBaseReportPy {
+    /*
+     * Workspace ID reference - eg. 'ws/id/ver'
+     * @id ws
+     */
+    typedef string ws_id;
+
+    /*
+     * Represents a Workspace object with some brief description text
+     * that can be associated with the object.
+     * Required arguments:
+     *     ws_id ref - workspace ID
+     * Optional arguments:
+     *     string description - A plaintext, human-readable description of the
+     *         object created.
+     * @optional description
+     */
+    typedef structure {
+        ws_id ref;
+        string description;
+    } WorkspaceObject;
+
     /*
      * A simple report for use in create()
      * Required arguments:
@@ -20,7 +40,7 @@ module KBaseReportPy {
     typedef structure {
         string text_message;
         list<string> warnings;
-        list<KBaseReportPyWorkspace.WorkspaceObject> objects_created;
+        list<WorkspaceObject> objects_created;
     } SimpleReport;
 
     /*
@@ -48,7 +68,7 @@ module KBaseReportPy {
      *        create_extended, this can optionally be set in a parameter.
      */
     typedef structure {
-        KBaseReportPyWorkspace.ws_id ref;
+        ws_id ref;
         string name;
     } ReportInfo;
 
@@ -110,7 +130,7 @@ module KBaseReportPy {
      */
     typedef structure {
         string message;
-        list<KBaseReportPyWorkspace.WorkspaceObject> objects_created;
+        list<WorkspaceObject> objects_created;
         list<string> warnings;
         list<File> html_links;
         string direct_html;

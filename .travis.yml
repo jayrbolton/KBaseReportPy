@@ -11,7 +11,9 @@ install:
   - kb-sdk sdkbase
   - kb-sdk test || true
   - make build-test-script
+    # Place the TEST_TOKEN env var in the test.cfg file
   - sed -i "s/test_token=/test_token=$TEST_TOKEN/" test_local/test.cfg
+    # Run tests as root user (UID 0 and GID 0)
   - sed -i 's/$(id -u)/0:0/' test_local/run_tests.sh
 
 script:

@@ -24,7 +24,7 @@ class KBaseReportPy:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/jayrbolton/KBaseReportPy"
-    GIT_COMMIT_HASH = "f8a912d6a92dd61048a12deece432be89e979113"
+    GIT_COMMIT_HASH = "fc8e497e201bd50fd82280ba6db39ac0bd599f54"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER

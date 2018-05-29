@@ -114,7 +114,15 @@ def _validate_html_index(html_links, index):
     """
     if (index is None) or (not html_links):
         return
-    html_link = html_links[index]
+    try:
+        html_link = html_links[index]
+    except IndexError as err:
+        print("".join([
+            "direct_html_link_index is out of bounds for html_links. ",
+            "The index is " + str(index),
+            " while the length of html_links is " + str(len(html_links))
+        ]))
+        raise err
     if 'path' not in html_link:
         return
     # If they passed in a file, we don't need to validate

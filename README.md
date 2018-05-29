@@ -3,7 +3,7 @@
 
 This is a [KBase SDK](https://github.com/kbase/kb_sdk) app that can be used within other apps to generate output reports in the narrative.
 
-[How to create a KBaseReport](https://github.com/kbase/kb_sdk/blob/master/doc/howto/create_a_report.md)
+[How to create a KBaseReport](https://kbase.github.io/kb_sdk_docs/howtos/create_a_report.html)
 
 # API
 

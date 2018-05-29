@@ -62,12 +62,13 @@ module KBaseReport {
      *         has created. They will get linked in the report view
      *     list<LinkedFile> file_links - List of LinkedFiles that the report
      *         lists out for the user to download
-     *     list<LinkedFile> html_links - List of zipped directories of HTML
-     *         files and content that the report will render or link for download
+     *     list<LinkedFile> html_links - List of directories of HTML files and content
+     *         that the report will render or link for download. Pass in either
+     *         direct_html or direct_html_link_index, not both.
      *     string direct_html - Simple HTML text that will be rendered within the report widget.
-     *         If you pass in both direct_html and html_links, then direct_html will be ignored
+     *         Pass in either direct_html or direct_html_link_index, not both.
      *     int direct_html_link_index - Index in html_links to set the direct/default view in the
-     *         report (ignored if direct_html is present)
+     *         report. Do not also pass in direct_html if you set this.
      *     html_window_height - Fixed height in pixels of the HTML window for the report
      *     summary_window_height - Fixed height in pixels of the summary window for the report
      * @optional warnings file_links html_links direct_html direct_html_link_index

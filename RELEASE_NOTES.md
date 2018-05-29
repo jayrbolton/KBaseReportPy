@@ -1,10 +1,11 @@
-# KBaseReportPy release notes
+KBaseReport Release Notes
 =========================================
 
-0.0.1
+3.0.0
 -----
-* Basic functionality
+- Refactored the app into Python with improved tests and documentation
+- Split the KIDL spec into KBaseReport.spec (for the API) and KBaseReportWorkspace (for the Workspace)
 
-0.0.0
+2.3.1
 -----
-* Module created by kb-sdk init
+- Bug fix to cleanup zip area

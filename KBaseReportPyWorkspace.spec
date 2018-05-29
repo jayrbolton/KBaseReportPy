@@ -68,7 +68,10 @@ module KBaseReport {
      *         If you pass in both direct_html and html_links, then direct_html will be ignored
      *     int direct_html_link_index - Index in html_links to set the direct/default view in the
      *         report (ignored if direct_html is present)
+     *     html_window_height - Fixed height in pixels of the HTML window for the report
+     *     summary_window_height - Fixed height in pixels of the summary window for the report
      * @optional warnings file_links html_links direct_html direct_html_link_index
+     * @optional html_window_height summary_window_height
      * @metadata ws length(warnings) as Warnings
      * @metadata ws length(text_message) as Message Length
      * @metadata ws length(objects_created) as Objects Created
@@ -81,5 +84,7 @@ module KBaseReport {
         list<LinkedFile> html_links;
         string direct_html;
         int direct_html_link_index;
+        float html_window_height;
+        float summary_window_height;
     } Report;
 };

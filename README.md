@@ -1,7 +1,7 @@
 
 # KBaseReportPy
 
-This is a [KBase SDK](https://github.com/kbase/kb_sdk) app that can be used within other apps to generate output reports in the narrative.
+This is a [KBase SDK](https://github.com/kbase/kb_sdk) app that can be used within other apps to generate output reports that describe the results of running an app.
 
 [How to create a KBaseReport](https://kbase.github.io/kb_sdk_docs/howtos/create_a_report.html)
 

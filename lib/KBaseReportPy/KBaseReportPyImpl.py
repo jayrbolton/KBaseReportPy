@@ -24,7 +24,7 @@ class KBaseReportPy:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/jayrbolton/KBaseReportPy"
-    GIT_COMMIT_HASH = "7e60311bf052913e326bb1d11d65aa92a78751d8"
+    GIT_COMMIT_HASH = "c84ea2c55efe80bef0d7f2fcc25d3525dc8e4c0c"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -46,18 +46,19 @@ class KBaseReportPy:
         text-based report for an app run.
         @deprecated KBaseReportPy.create_extended_report
         :param params: instance of type "CreateParams" (* Parameters for the
-           create() method * Pass in *either* workspace_name or workspace_id
-           -- only one is needed * Required arguments: *     SimpleReport
-           report - See the structure above *     string workspace_name -
-           Workspace name of the running app. Required *         if
-           workspace_id is absent *     int workspace_id - Workspace ID of
-           the running app. Required if *         workspace_name is absent)
-           -> structure: parameter "report" of type "SimpleReport" (* A
-           simple report for use in create() * Optional arguments: *    
-           string text_message - Readable plain-text report message *    
-           string direct_html - Simple HTML text that will be rendered within
-           the report widget *     list<string> warnings - A list of
-           plain-text warning messages *     list<WorkspaceObject>
+           create() method * * Pass in *either* workspace_name or
+           workspace_id -- only one is needed. * Note that workspace_id is
+           preferred over workspace_name because workspace_id immutable. * *
+           Required arguments: *     SimpleReport report - See the structure
+           above *     string workspace_name - Workspace name of the running
+           app. Required *         if workspace_id is absent *     int
+           workspace_id - Workspace ID of the running app. Required if *     
+           workspace_name is absent) -> structure: parameter "report" of type
+           "SimpleReport" (* A simple report for use in create() * Optional
+           arguments: *     string text_message - Readable plain-text report
+           message *     string direct_html - Simple HTML text that will be
+           rendered within the report widget *     list<string> warnings - A
+           list of plain-text warning messages *     list<WorkspaceObject>
            objects_created - List of result workspace objects that this app *
            has created. They will get linked in the report view) ->
            structure: parameter "text_message" of String, parameter
@@ -106,19 +107,22 @@ class KBaseReportPy:
         and HTML zipping, uploading, and linking as well as HTML rendering.
         :param params: instance of type "CreateExtendedReportParams" (*
            Parameters used to create a more complex report with file and HTML
-           links * * Required arguments: *     string workspace_name - Name
-           of the workspace where the report *         should be saved.
-           Required if workspace_id is not present *     int workspace_id -
-           ID of workspace where the report should be saved. *        
-           Required if workspace_name is not present * Optional arguments: * 
-           string message - Simple text message to store in the report object
-           *     list<WorkspaceObject> objects_created - List of result
-           workspace objects that this app *         has created. They will
-           get linked in the report view *     list<string> warnings - A list
-           of plain-text warning messages *     list<File> html_links - A
-           list of paths or shock IDs pointing to HTML files or directories.
-           *         If you pass in paths, they will be zipped and uploaded *
-           int direct_html_link_index - Index in html_links to set the
+           links * * Pass in *either* workspace_name or workspace_id -- only
+           one is needed. * Note that workspace_id is preferred over
+           workspace_name because workspace_id immutable. * * Required
+           arguments: *     string workspace_name - Name of the workspace
+           where the report *         should be saved. Required if
+           workspace_id is absent *     int workspace_id - ID of workspace
+           where the report should be saved. *         Required if
+           workspace_name is absent * Optional arguments: *     string
+           message - Simple text message to store in the report object *    
+           list<WorkspaceObject> objects_created - List of result workspace
+           objects that this app *         has created. They will get linked
+           in the report view *     list<string> warnings - A list of
+           plain-text warning messages *     list<File> html_links - A list
+           of paths or shock IDs pointing to HTML files or directories. *    
+           If you pass in paths, they will be zipped and uploaded *     int
+           direct_html_link_index - Index in html_links to set the
            direct/default view in the *         report (ignored if
            direct_html is present) *     string direct_html - Simple HTML
            text that will be rendered within the report widget *         If

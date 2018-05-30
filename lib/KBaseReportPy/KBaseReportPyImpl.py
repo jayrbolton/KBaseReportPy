@@ -24,7 +24,7 @@ class KBaseReportPy:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/jayrbolton/KBaseReportPy"
-    GIT_COMMIT_HASH = "c84ea2c55efe80bef0d7f2fcc25d3525dc8e4c0c"
+    GIT_COMMIT_HASH = "e3ae8dbb0802480eabad8330974e91f5bdac95bd"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -117,19 +117,20 @@ class KBaseReportPy:
            workspace_name is absent * Optional arguments: *     string
            message - Simple text message to store in the report object *    
            list<WorkspaceObject> objects_created - List of result workspace
-           objects that this app *         has created. They will get linked
+           objects that this app *         has created. They will be linked
            in the report view *     list<string> warnings - A list of
            plain-text warning messages *     list<File> html_links - A list
            of paths or shock IDs pointing to HTML files or directories. *    
-           If you pass in paths, they will be zipped and uploaded *     int
-           direct_html_link_index - Index in html_links to set the
-           direct/default view in the *         report (ignored if
-           direct_html is present) *     string direct_html - Simple HTML
-           text that will be rendered within the report widget *         If
-           you pass in both direct_html and html_links, then direct_html will
-           be ignored *     list<File> file_links - A list of file paths or
-           shock node IDs. Allows the user to *         specify files that
-           the report widget should link to the user for download *    
+           If you pass in paths to directories, they will be zipped and
+           uploaded *     int direct_html_link_index - Index in html_links to
+           set the direct/default view in the *         report. Set either
+           direct_html_link_index or direct_html, but not both *     string
+           direct_html - Simple HTML text content that will be rendered
+           within the report *         widget. Set either direct_html or
+           direct_html_link_index, but not both *     list<File> file_links -
+           A list of file paths or shock node IDs. Allows the user to *      
+           specify files that the report widget should link for download. If
+           you pass in paths *         to directories, they will be zipped * 
            string report_object_name - Name to use for the report object
            (will *         be auto-generated if unspecified) *    
            html_window_height - Fixed height in pixels of the HTML window for

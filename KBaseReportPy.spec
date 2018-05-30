@@ -112,16 +112,17 @@ module KBaseReportPy {
      * Optional arguments:
      *     string message - Simple text message to store in the report object
      *     list<WorkspaceObject> objects_created - List of result workspace objects that this app
-     *         has created. They will get linked in the report view
+     *         has created. They will be linked in the report view
      *     list<string> warnings - A list of plain-text warning messages
      *     list<File> html_links - A list of paths or shock IDs pointing to HTML files or directories.
-     *         If you pass in paths, they will be zipped and uploaded
+     *         If you pass in paths to directories, they will be zipped and uploaded
      *     int direct_html_link_index - Index in html_links to set the direct/default view in the
-     *         report (ignored if direct_html is present)
-     *     string direct_html - Simple HTML text that will be rendered within the report widget
-     *         If you pass in both direct_html and html_links, then direct_html will be ignored
+     *         report. Set either direct_html_link_index or direct_html, but not both
+     *     string direct_html - Simple HTML text content that will be rendered within the report
+     *         widget. Set either direct_html or direct_html_link_index, but not both
      *     list<File> file_links - A list of file paths or shock node IDs. Allows the user to
-     *         specify files that the report widget should link to the user for download
+     *         specify files that the report widget should link for download. If you pass in paths
+     *         to directories, they will be zipped
      *     string report_object_name - Name to use for the report object (will
      *         be auto-generated if unspecified)
      *     html_window_height - Fixed height in pixels of the HTML window for the report
@@ -133,7 +134,7 @@ module KBaseReportPy {
         list<string> warnings;
         list<File> html_links;
         string direct_html;
-        int  direct_html_link_index;
+        int direct_html_link_index;
         list<File> file_links;
         string report_object_name;
         float html_window_height;

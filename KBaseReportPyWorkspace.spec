@@ -36,10 +36,10 @@ module KBaseReport {
      * links to or renders as HTML. Used by Report for either html_links or file_links.
      * Required arguments:
      *     handle_ref handle - Handle ID
-     *     string name - Plain-text name of the file (shown to the user)
+     *     string name - Filename, such as results.zip (shown to the user)
      *     string URL - URL of shock node: <shock-url>/node/<shock-handle-id>
      * Optional arguments:
-     *     string label - A plain-text, human-readable label for this file
+     *     string label - A short description for the file (eg. "Filter results")
      *     string description - A more detailed, human-readable description of the file
      * @optional description label
      */

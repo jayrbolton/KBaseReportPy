@@ -40,7 +40,10 @@ module KBaseReportPy {
 
     /*
      * Parameters for the create() method
-     * Pass in *either* workspace_name or workspace_id -- only one is needed
+     *
+     * Pass in *either* workspace_name or workspace_id -- only one is needed.
+     * Note that workspace_id is preferred over workspace_name because workspace_id immutable.
+     *
      * Required arguments:
      *     SimpleReport report - See the structure above
      *     string workspace_name - Workspace name of the running app. Required
@@ -98,11 +101,14 @@ module KBaseReportPy {
     /*
      * Parameters used to create a more complex report with file and HTML links
      *
+     * Pass in *either* workspace_name or workspace_id -- only one is needed.
+     * Note that workspace_id is preferred over workspace_name because workspace_id immutable.
+     *
      * Required arguments:
      *     string workspace_name - Name of the workspace where the report
-     *         should be saved. Required if workspace_id is not present
+     *         should be saved. Required if workspace_id is absent
      *     int workspace_id - ID of workspace where the report should be saved.
-     *         Required if workspace_name is not present
+     *         Required if workspace_name is absent
      * Optional arguments:
      *     string message - Simple text message to store in the report object
      *     list<WorkspaceObject> objects_created - List of result workspace objects that this app

@@ -22,7 +22,7 @@ class KBaseReportPy:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.0.1"
+    VERSION = "3.0.0"
     GIT_URL = "https://github.com/jayrbolton/KBaseReportPy"
     GIT_COMMIT_HASH = "e3ae8dbb0802480eabad8330974e91f5bdac95bd"
 

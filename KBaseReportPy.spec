@@ -87,14 +87,16 @@ module KBaseReportPy {
      * Required arguments:
      *     string path - Can be a file or directory path. Required if shock_id is absent
      *     string shock_id - Shock node ID. Required if path is absent
-     *     string name - Plain-text file name -- shown to the user
+     *     string name - Plain-text filename (eg. "results.zip") -- shown to the user
      * Optional arguments:
-     *     string description - A plaintext, human-readable description of the file
+     *     string label - A short description for the file (eg. "Filter results")
+     *     string description - A more detailed, human-readable description of the file
      */
     typedef structure {
         string path;
         string shock_id;
         string name;
+        string label;
         string description;
     } File;
 
